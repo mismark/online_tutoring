@@ -1,5 +1,168 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Profile{% endblock %}
 
 {% block content %}
-<h2>My Profile</h2>
+
+<link rel="stylesheet" href="{% static 'accounts/css/accounts.css' %}">
+
+<div class="container py-5">
+
+<div class="profile-card">
+
+<div class="text-center">
+
+{% if user.profile_picture %}
+
+<img src="{{ user.profile_picture.url }}" class="profile-img">
+
+{% else %}
+
+<img src="{% static 'images/default-user.png' %}" class="profile-img">
+
+{% endif %}
+
+<h2 class="mt-3">
+
+{{ user.get_full_name }}
+
+</h2>
+
+<span class="badge bg-primary">
+
+{{ user.role|title }}
+
+</span>
+
+</div>
+
+<hr>
+
+<div class="row mt-4">
+
+<div class="col-md-6">
+
+<p><strong>Username</strong></p>
+
+<p>{{ user.username }}</p>
+
+</div>
+
+<div class="col-md-6">
+
+<p><strong>Email</strong></p>
+
+<p>{{ user.email }}</p>
+
+</div>
+
+<div class="col-md-6">
+
+<p><strong>Phone</strong></p>
+
+<p>{{ user.phone }}</p>
+
+</div>
+
+<div class="col-md-6">
+
+<p><strong>Date of Birth</strong></p>
+
+<p>{{ user.date_of_birth }}</p>
+
+</div>
+
+<div class="col-md-12">
+
+<p><strong>Address</strong></p>
+
+<p>{{ user.address }}</p>
+
+</div>
+
+<div class="col-md-12">
+
+<p><strong>Bio</strong></p>
+
+<p>{{ user.bio }}</p>
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="row text-center">
+
+<div class="col-md-3">
+
+<div class="stat-card">
+
+<h3>0</h3>
+
+<p>Courses</p>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="stat-card">
+
+<h3>0</h3>
+
+<p>Lessons</p>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="stat-card">
+
+<h3>0</h3>
+
+<p>Assignments</p>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="stat-card">
+
+<h3>0</h3>
+
+<p>Certificates</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="text-center mt-4">
+
+<a href="{% url 'accounts:edit_profile' %}" class="btn btn-primary">
+
+Edit Profile
+
+</a>
+
+<a href="#" class="btn btn-outline-primary">
+
+Change Password
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
 {% endblock %}

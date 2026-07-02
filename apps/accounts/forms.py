@@ -128,3 +128,57 @@ class LoginForm(AuthenticationForm):
             "placeholder": "Password"
         })
     )
+class UpdateProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = [
+            "first_name",
+            "last_name",
+            "email",
+            "phone",
+            "date_of_birth",
+            "address",
+            "bio",
+            "profile_picture",
+        ]
+
+        widgets = {
+
+            "first_name": forms.TextInput(attrs={
+                "class":"form-control"
+            }),
+
+            "last_name": forms.TextInput(attrs={
+                "class":"form-control"
+            }),
+
+            "email": forms.EmailInput(attrs={
+                "class":"form-control"
+            }),
+
+            "phone": forms.TextInput(attrs={
+                "class":"form-control"
+            }),
+
+            "date_of_birth": forms.DateInput(attrs={
+                "class":"form-control",
+                "type":"date"
+            }),
+
+            "address": forms.Textarea(attrs={
+                "class":"form-control",
+                "rows":3
+            }),
+
+            "bio": forms.Textarea(attrs={
+                "class":"form-control",
+                "rows":4
+            }),
+
+            "profile_picture": forms.FileInput(attrs={
+                "class":"form-control",
+                "id":"imageInput"
+            }),
+
+        }    

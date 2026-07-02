@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, UpdateProfileForm
 
 
 def register_view(request):
@@ -43,9 +43,43 @@ def logout_view(request):
 
 @login_required
 def profile_view(request):
-    return render(request, "accounts/profile.html")
 
+    context = {
+        "user": request.user,
+    }
+
+    return render(request, "accounts/profile.html", context)
 
 @login_required
 def edit_profile(request):
-    return render(request, "accounts/edit_profile.html")
+
+    if request.method == "POST":
+
+        form = UpdateProfileForm(
+            request.POST,
+            request.FILES,
+            instance=request.user
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            messages.success(
+                request,
+                "Profile updated successfully."
+            )
+
+            return redirect("accounts:profile")
+
+    else:
+
+        form = UpdateProfileForm(instance=request.user)
+
+    return render(
+        request,
+        "accounts/edit_profile.html",
+        {
+            "form":form
+        }
+    )
