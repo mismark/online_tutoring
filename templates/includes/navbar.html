@@ -1,72 +1,39 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<ul class="navbar-nav ms-auto">
 
-    <div class="container">
+{% if user.is_authenticated %}
 
-        <a class="navbar-brand" href="/">
-            🎓 Online Tutoring
-        </a>
+<li class="nav-item">
 
-        <button class="navbar-toggler"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbar">
+<a class="nav-link" href="{% url 'accounts:logout' %}">
 
-            <span class="navbar-toggler-icon"></span>
+Logout
 
-        </button>
+</a>
 
-        <div class="collapse navbar-collapse"
-             id="navbar">
+</li>
 
-            <ul class="navbar-nav ms-auto">
+{% else %}
 
-                <li class="nav-item">
+<li class="nav-item">
 
-                    <a href="/"
-                       class="nav-link">
+<a class="nav-link" href="{% url 'accounts:login' %}">
 
-                        Home
+Login
 
-                    </a>
+</a>
 
-                </li>
+</li>
 
-                <li class="nav-item">
+<li class="nav-item">
 
-                    <a href="#"
-                       class="nav-link">
+<a class="nav-link" href="{% url 'accounts:register' %}">
 
-                        Courses
+Register
 
-                    </a>
+</a>
 
-                </li>
+</li>
 
-                <li class="nav-item">
+{% endif %}
 
-                    <a href="#"
-                       class="nav-link">
-
-                        Login
-
-                    </a>
-
-                </li>
-
-                <li class="nav-item">
-
-                    <a href="#"
-                       class="nav-link">
-
-                        Register
-
-                    </a>
-
-                </li>
-
-            </ul>
-
-        </div>
-
-    </div>
-
-</nav>
+</ul>
