@@ -62,7 +62,7 @@ def login_view(request):
                 f"Welcome back {user.first_name}!"
             )
 
-            return redirect("accounts:profile")
+            return redirect("dashboard:home")
 
         else:
 

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Parent Dashboard{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2>👨‍👩‍👧 Parent Dashboard</h2>
+
+    <div class="card shadow p-4 mt-4">
+        <h4>Welcome {{ user.first_name }}</h4>
+        <p>Monitor your child's learning progress.</p>
+    </div>
+
+</div>
+
+{% endblock %}
