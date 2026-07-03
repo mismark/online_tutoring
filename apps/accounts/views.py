@@ -40,7 +40,7 @@ def register_view(request):
 def login_view(request):
 
     if request.user.is_authenticated:
-        return redirect("accounts:profile")
+        return redirect("dashboard:home")
 
     if request.method == "POST":
 
