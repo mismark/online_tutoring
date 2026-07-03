@@ -40,9 +40,10 @@ def course_create(request):
 
         if form.is_valid():
             course = form.save(commit=False)
+            course.teacher = request.user
             course.created_by = request.user
             course.save()
-
+         
             messages.success(
                 request,
                 "Course created successfully."

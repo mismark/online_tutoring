@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ course.title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'courses/css/courses.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow">
+
+                {% if course.image %}
+                <img src="{{ course.image.url }}"
+                     class="card-img-top"
+                     alt="{{ course.title }}">
+                {% endif %}
+
+                <div class="card-body">
+
+                    <h2 class="fw-bold">
+                        {{ course.title }}
+                    </h2>
+
+                    <hr>
+
+                    <p class="lead">
+                        {{ course.description }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h5 class="mb-0">
+                        Course Information
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table table-bordered">
+
+                        <tr>
+                            <th>Price</th>
+                            <td>${{ course.price }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Level</th>
+                            <td>{{ course.level }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Status</th>
+
+                            <td>
+
+                                {% if course.is_published %}
+                                    <span class="badge bg-success">
+                                        Published
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-secondary">
+                                        Draft
+                                    </span>
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <th>Created By</th>
+                            <td>{{ course.created_by }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Created</th>
+                            <td>{{ course.created_at|date:"M d, Y" }}</td>
+                        </tr>
+
+                    </table>
+
+                    <div class="d-grid gap-2">
+
+                        <a href="{% url 'courses:course_update' course.id %}"
+                           class="btn btn-warning">
+                            Edit Course
+                        </a>
+
+                        <a href="{% url 'courses:course_delete' course.id %}"
+                           class="btn btn-danger">
+                            Delete Course
+                        </a>
+
+                        <a href="{% url 'courses:course_list' %}"
+                           class="btn btn-secondary">
+                            Back to Courses
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'courses/js/courses.js' %}"></script>
+{% endblock %}

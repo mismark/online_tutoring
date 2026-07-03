@@ -30,8 +30,14 @@ class Course(models.Model):
     teacher = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="courses",
-        limit_choices_to={"role": "teacher"}
+        related_name="teaching_courses",
+        limit_choices_to={"role": "teacher"},
+    )
+
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="created_courses",
     )
 
     price = models.DecimalField(
