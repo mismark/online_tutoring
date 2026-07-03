@@ -303,3 +303,27 @@ width:200px;
 background:#f8f9fa;
 
 }
+
+
+/* for profile view  */
+.card{
+    border-radius:15px;
+}
+
+.card-header{
+    font-size:22px;
+    font-weight:bold;
+}
+
+table th{
+    width:220px;
+    background:#f8f9fa;
+}
+
+.rounded-circle{
+    object-fit:cover;
+}
+
+.btn-primary{
+    padding:10px 25px;
+}

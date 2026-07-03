@@ -5,6 +5,10 @@ from django.contrib.auth.decorators import login_required
 
 from .forms import RegisterForm, LoginForm, UpdateProfileForm
 
+from django.shortcuts import render
+
+def home(request):
+    return render(request, "home.html")
 
 def register_view(request):
     if request.method == "POST":
@@ -36,7 +40,7 @@ def register_view(request):
 def login_view(request):
 
     if request.user.is_authenticated:
-        return redirect("dashboard:home")
+        return redirect("accounts:profile")
 
     if request.method == "POST":
 
@@ -58,7 +62,7 @@ def login_view(request):
                 f"Welcome back {user.first_name}!"
             )
 
-            return redirect("dashboard:home")
+            return redirect("accounts:profile")
 
         else:
 
