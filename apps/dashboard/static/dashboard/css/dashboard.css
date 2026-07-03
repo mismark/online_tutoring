@@ -1,0 +1,11 @@
+.card{
+    border-radius:15px;
+}
+
+.card-header{
+    font-size:22px;
+}
+
+.card-body{
+    padding:30px;
+}
