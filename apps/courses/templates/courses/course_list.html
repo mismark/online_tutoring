@@ -12,14 +12,12 @@
 <div class="container mt-5">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-
-        <h2>All Courses</h2>
+        <h2>Courses</h2>
 
         <a href="{% url 'courses:course_create' %}"
            class="btn btn-primary">
             + Create Course
         </a>
-
     </div>
 
     {% if courses %}
@@ -30,41 +28,48 @@
 
         <div class="col-md-4 mb-4">
 
-            <div class="card shadow h-100">
+            <div class="card shadow-sm h-100">
 
                 {% if course.thumbnail %}
-                <img src="{{ course.thumbnail.url }}"
-                     class="card-img-top"
-                     style="height:220px;object-fit:cover;">
+                    <img src="{{ course.thumbnail.url }}"
+                         class="card-img-top"
+                         style="height:220px; object-fit:cover;">
+                {% else %}
+                    <img src="{% static 'images/default-course.png' %}"
+                         class="card-img-top"
+                         style="height:220px; object-fit:cover;">
                 {% endif %}
 
                 <div class="card-body">
 
                     <h5>{{ course.title }}</h5>
 
-                    <p>{{ course.description|truncatewords:20 }}</p>
-
-                    <p>
-
-                        <strong>Price:</strong>
-
-                        ${{ course.price }}
-
+                    <p class="text-muted">
+                        {{ course.description|truncatewords:20 }}
                     </p>
 
                     <p>
+                        <strong>Teacher:</strong>
+                        {{ course.teacher }}
+                    </p>
 
+                    <p>
                         <strong>Level:</strong>
-
                         {{ course.get_level_display }}
-
                     </p>
 
-                    <a href="{% url 'courses:course_detail' course.id %}"
-                       class="btn btn-success">
+                    <p>
+                        <strong>Status:</strong>
+                        {{ course.get_status_display }}
+                    </p>
 
-                        View Details
+                    <p class="fw-bold text-success">
+                        ${{ course.price }}
+                    </p>
 
+                    <a href="{% url 'courses:course_detail' course.pk %}"
+                       class="btn btn-outline-primary w-100">
+                        View Course
                     </a>
 
                 </div>
@@ -80,9 +85,7 @@
     {% else %}
 
     <div class="alert alert-info">
-
-        No courses available.
-
+        No courses have been created yet.
     </div>
 
     {% endif %}
