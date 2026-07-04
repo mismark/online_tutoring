@@ -13,6 +13,8 @@ def course_list(request):
 
     query = request.GET.get("q")
     level = request.GET.get("level")
+    status = request.GET.get("status")
+    sort = request.GET.get("sort")
 
     courses = Course.objects.all()
 
@@ -25,6 +27,24 @@ def course_list(request):
     if level:
         courses = courses.filter(level=level)
 
+    if status:
+        courses = courses.filter(status=status)
+
+    if sort == "oldest":
+        courses = courses.order_by("created_at")
+
+    elif sort == "title":
+        courses = courses.order_by("title")
+
+    elif sort == "price_low":
+        courses = courses.order_by("price")
+
+    elif sort == "price_high":
+        courses = courses.order_by("-price")
+
+    else:
+        courses = courses.order_by("-created_at")
+
     return render(
         request,
         "courses/course_list.html",
@@ -32,6 +52,8 @@ def course_list(request):
             "courses": courses,
             "query": query,
             "level": level,
+            "status": status,
+            "sort": sort,
         }
     )
 

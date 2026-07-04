@@ -12,33 +12,55 @@
     <!-- Search Form -->
     <form method="GET" class="row g-3 mb-4">
 
-    <div class="col-md-6">
+    <div class="col-md-3">
         <input
             type="text"
             name="q"
             class="form-control"
-            placeholder="Search courses..."
+            placeholder="Search..."
             value="{{ query }}">
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-2">
         <select name="level" class="form-select">
-
             <option value="">All Levels</option>
+            <option value="beginner" {% if level == "beginner" %}selected{% endif %}>Beginner</option>
+            <option value="intermediate" {% if level == "intermediate" %}selected{% endif %}>Intermediate</option>
+            <option value="advanced" {% if level == "advanced" %}selected{% endif %}>Advanced</option>
+        </select>
+    </div>
 
-            <option value="beginner"
-                {% if level == "beginner" %}selected{% endif %}>
-                Beginner
+    <div class="col-md-2">
+        <select name="status" class="form-select">
+            <option value="">All Status</option>
+            <option value="draft" {% if status == "draft" %}selected{% endif %}>Draft</option>
+            <option value="published" {% if status == "published" %}selected{% endif %}>Published</option>
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <select name="sort" class="form-select">
+
+            <option value="">Newest First</option>
+
+            <option value="oldest"
+                {% if sort == "oldest" %}selected{% endif %}>
+                Oldest First
             </option>
 
-            <option value="intermediate"
-                {% if level == "intermediate" %}selected{% endif %}>
-                Intermediate
+            <option value="title"
+                {% if sort == "title" %}selected{% endif %}>
+                Title (A-Z)
             </option>
 
-            <option value="advanced"
-                {% if level == "advanced" %}selected{% endif %}>
-                Advanced
+            <option value="price_low"
+                {% if sort == "price_low" %}selected{% endif %}>
+                Price: Low to High
+            </option>
+
+            <option value="price_high"
+                {% if sort == "price_high" %}selected{% endif %}>
+                Price: High to Low
             </option>
 
         </select>
@@ -46,7 +68,7 @@
 
     <div class="col-md-2">
         <button class="btn btn-primary w-100">
-            Search
+            Apply
         </button>
     </div>
 
