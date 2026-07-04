@@ -6,15 +6,28 @@ from .models import Course
 from .forms import CourseForm
 
 
+from django.db.models import Q
+
+
 @login_required
 def course_list(request):
+
+    query = request.GET.get("q")
+
     courses = Course.objects.all()
+
+    if query:
+        courses = courses.filter(
+            Q(title__icontains=query) |
+            Q(description__icontains=query)
+        )
 
     return render(
         request,
         "courses/course_list.html",
         {
-            "courses": courses
+            "courses": courses,
+            "query": query,
         }
     )
 

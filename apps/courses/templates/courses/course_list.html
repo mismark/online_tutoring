@@ -13,6 +13,38 @@
 
         {% for course in courses %}
 
+        <form method="GET" class="mb-4">
+
+    <div class="input-group">
+
+        <input
+            type="text"
+            name="q"
+            class="form-control"
+            placeholder="Search courses..."
+            value="{{ query }}">
+
+        <button class="btn btn-primary">
+
+            Search
+
+        </button>
+
+    </div>
+
+</form>
+
+{% if not courses %}
+
+<div class="alert alert-warning">
+
+    No courses found.
+
+</div>
+
+{% endif %}
+
+
         <div class="col-md-4">
 
             <div class="card mb-4 shadow">
