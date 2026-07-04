@@ -66,12 +66,16 @@ def course_list(request):
             "level": level,
             "status": status,
             "sort": sort,
+            
             "total_courses": Course.objects.count(),
             "published_courses": Course.objects.filter(status="published").count(),
             "draft_courses": Course.objects.filter(status="draft").count(),
+            
             "beginner_courses": Course.objects.filter(level="beginner").count(),
             "intermediate_courses": Course.objects.filter(level="intermediate").count(),
             "advanced_courses": Course.objects.filter(level="advanced").count(),
+            
+            "recent_courses": recent_courses,
         }
     )
 
