@@ -3,24 +3,24 @@
 
 {% block title %}{{ course.title }}{% endblock %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'courses/css/courses.css' %}">
-{% endblock %}
-
 {% block content %}
 
-<div class="container mt-5">
+<div class="container mt-4">
 
     <div class="card shadow">
 
         {% if course.thumbnail %}
-            <img src="{{ course.thumbnail.url }}"
-                 class="card-img-top"
-                 style="height:350px; object-fit:cover;">
+            <img
+                src="{{ course.thumbnail.url }}"
+                class="card-img-top"
+                style="height:350px; object-fit:cover;"
+                alt="{{ course.title }}">
         {% else %}
-            <img src="{% static 'images/default-course.png' %}"
-                 class="card-img-top"
-                 style="height:350px; object-fit:cover;">
+            <img
+                src="{% static 'images/default-course.png' %}"
+                class="card-img-top"
+                style="height:350px; object-fit:cover;"
+                alt="No Image">
         {% endif %}
 
         <div class="card-body">
@@ -30,13 +30,8 @@
             <hr>
 
             <p>
-                <strong>Description:</strong><br>
-                {{ course.description }}
-            </p>
-
-            <p>
                 <strong>Teacher:</strong>
-                {{ course.teacher }}
+                {{ course.created_by.get_full_name|default:course.created_by.username }}
             </p>
 
             <p>
@@ -54,29 +49,26 @@
                 {{ course.get_status_display }}
             </p>
 
+            <hr>
+
             <p>
-                <strong>Created:</strong>
-                {{ course.created_at }}
+                {{ course.description }}
             </p>
 
-            <div class="mt-4">
+            <a href="{% url 'courses:course_update' course.pk %}"
+               class="btn btn-warning">
+                Edit
+            </a>
 
-                <a href="{% url 'courses:course_update' course.pk %}"
-                   class="btn btn-warning">
-                    Edit
-                </a>
+            <a href="{% url 'courses:course_delete' course.pk %}"
+               class="btn btn-danger">
+                Delete
+            </a>
 
-                <a href="{% url 'courses:course_delete' course.pk %}"
-                   class="btn btn-danger">
-                    Delete
-                </a>
-
-                <a href="{% url 'courses:course_list' %}"
-                   class="btn btn-secondary">
-                    Back
-                </a>
-
-            </div>
+            <a href="{% url 'courses:course_list' %}"
+               class="btn btn-secondary">
+                Back
+            </a>
 
         </div>
 
@@ -84,8 +76,4 @@
 
 </div>
 
-{% endblock %}
-
-{% block extra_js %}
-<script src="{% static 'courses/js/courses.js' %}"></script>
 {% endblock %}

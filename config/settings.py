@@ -58,6 +58,8 @@ INSTALLED_APPS = [
     'apps.chat',
     'apps.notifications',
     'apps.certificates',
+    # extensions
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
