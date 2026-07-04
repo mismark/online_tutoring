@@ -31,7 +31,7 @@
 
             <p>
                 <strong>Teacher:</strong>
-                {{ course.created_by.get_full_name|default:course.created_by.username }}
+                {{ course.teacher.get_full_name|default:course.teacher.username }}
             </p>
 
             <p>
@@ -49,21 +49,37 @@
                 {{ course.get_status_display }}
             </p>
 
+            <p>
+                <strong>Created:</strong>
+                {{ course.created_at|date:"F d, Y" }}
+            </p>
+
+            <p>
+                <strong>Last Updated:</strong>
+                {{ course.updated_at|date:"F d, Y" }}
+            </p>
+
             <hr>
 
             <p>
                 {{ course.description }}
             </p>
 
-            <a href="{% url 'courses:course_update' course.pk %}"
-               class="btn btn-warning">
-                Edit
-            </a>
+            <hr>
 
-            <a href="{% url 'courses:course_delete' course.pk %}"
-               class="btn btn-danger">
-                Delete
-            </a>
+            {% if request.user == course.teacher or request.user.is_superuser %}
+
+                <a href="{% url 'courses:course_update' course.pk %}"
+                   class="btn btn-warning">
+                    Edit
+                </a>
+
+                <a href="{% url 'courses:course_delete' course.pk %}"
+                   class="btn btn-danger">
+                    Delete
+                </a>
+
+            {% endif %}
 
             <a href="{% url 'courses:course_list' %}"
                class="btn btn-secondary">

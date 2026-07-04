@@ -5,31 +5,36 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Course
 from .forms import CourseForm
 
-
+from django.core.paginator import Paginator
 from django.db.models import Q
 
 @login_required
 def course_list(request):
 
-    query = request.GET.get("q")
-    level = request.GET.get("level")
-    status = request.GET.get("status")
-    sort = request.GET.get("sort")
+    query = request.GET.get("q", "")
+    level = request.GET.get("level", "")
+    status = request.GET.get("status", "")
+    sort = request.GET.get("sort", "")
 
+    # Get all courses first
     courses = Course.objects.all()
 
+    # Search
     if query:
         courses = courses.filter(
             Q(title__icontains=query) |
             Q(description__icontains=query)
         )
 
+    # Filter by level
     if level:
         courses = courses.filter(level=level)
 
+    # Filter by status
     if status:
         courses = courses.filter(status=status)
 
+    # Sorting
     if sort == "oldest":
         courses = courses.order_by("created_at")
 
@@ -45,6 +50,13 @@ def course_list(request):
     else:
         courses = courses.order_by("-created_at")
 
+    # Pagination (AFTER filtering and sorting)
+    paginator = Paginator(courses, 6)
+
+    page_number = request.GET.get("page")
+
+    courses = paginator.get_page(page_number)
+
     return render(
         request,
         "courses/course_list.html",
@@ -54,6 +66,7 @@ def course_list(request):
             "level": level,
             "status": status,
             "sort": sort,
+            "total_courses": Course.objects.count(),
         }
     )
 
@@ -107,6 +120,10 @@ def course_update(request, pk):
 
     course = get_object_or_404(Course, pk=pk)
 
+    if request.user != course.teacher and not request.user.is_superuser:
+        messages.error(request, "You are not allowed to edit this course.")
+        return redirect("courses:course_detail", pk=course.pk)
+
     if request.method == "POST":
         form = CourseForm(
             request.POST,
@@ -144,6 +161,10 @@ def course_update(request, pk):
 def course_delete(request, pk):
 
     course = get_object_or_404(Course, pk=pk)
+
+    if request.user != course.teacher and not request.user.is_superuser:
+        messages.error(request, "You are not allowed to delete this course.")
+        return redirect("courses:course_detail", pk=course.pk)
 
     if request.method == "POST":
         course.delete()

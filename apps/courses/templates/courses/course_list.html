@@ -119,6 +119,53 @@
 
         </div>
 
+
+        <nav class="mt-4">
+
+    <ul class="pagination justify-content-center">
+
+        {% if courses.has_previous %}
+
+        <li class="page-item">
+
+            <a class="page-link"
+               href="?page={{ courses.previous_page_number }}&q={{ query }}&level={{ level }}&status={{ status }}&sort={{ sort }}">
+                Previous
+            </a>
+
+        </li>
+
+        {% endif %}
+
+        <li class="page-item active">
+
+            <span class="page-link">
+
+                {{ courses.number }}
+
+            </span>
+
+        </li>
+
+        {% if courses.has_next %}
+
+        <li class="page-item">
+
+            <a class="page-link"
+               href="?page={{ courses.next_page_number }}&q={{ query }}&level={{ level }}&status={{ status }}&sort={{ sort }}">
+                Next
+            </a>
+
+        </li>
+
+        {% endif %}
+
+    </ul>
+
+</nav>
+
+
+
         {% endfor %}
 
     </div>
