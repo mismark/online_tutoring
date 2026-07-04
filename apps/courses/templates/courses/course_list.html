@@ -9,8 +9,29 @@
 
     <h2 class="mb-4">All Courses</h2>
 
-    <div class="alert alert-info">
-    <strong>Total Courses:</strong> {{ total_courses }}
+    <div class="row mb-4">
+
+    <div class="col-md-4">
+        <div class="alert alert-primary text-center">
+            <h5>Total Courses</h5>
+            <h2>{{ total_courses }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="alert alert-success text-center">
+            <h5>Published</h5>
+            <h2>{{ published_courses }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="alert alert-warning text-center">
+            <h5>Draft</h5>
+            <h2>{{ draft_courses }}</h2>
+        </div>
+    </div>
+
 </div>
 
     <!-- Search Form -->
