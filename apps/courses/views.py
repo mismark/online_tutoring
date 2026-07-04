@@ -8,11 +8,11 @@ from .forms import CourseForm
 
 from django.db.models import Q
 
-
 @login_required
 def course_list(request):
 
     query = request.GET.get("q")
+    level = request.GET.get("level")
 
     courses = Course.objects.all()
 
@@ -22,12 +22,16 @@ def course_list(request):
             Q(description__icontains=query)
         )
 
+    if level:
+        courses = courses.filter(level=level)
+
     return render(
         request,
         "courses/course_list.html",
         {
             "courses": courses,
             "query": query,
+            "level": level,
         }
     )
 

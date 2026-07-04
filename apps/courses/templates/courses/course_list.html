@@ -9,41 +9,58 @@
 
     <h2 class="mb-4">All Courses</h2>
 
-    <div class="row">
+    <!-- Search Form -->
+    <form method="GET" class="row g-3 mb-4">
 
-        {% for course in courses %}
-
-        <form method="GET" class="mb-4">
-
-    <div class="input-group">
-
+    <div class="col-md-6">
         <input
             type="text"
             name="q"
             class="form-control"
             placeholder="Search courses..."
             value="{{ query }}">
+    </div>
 
-        <button class="btn btn-primary">
+    <div class="col-md-4">
+        <select name="level" class="form-select">
 
+            <option value="">All Levels</option>
+
+            <option value="beginner"
+                {% if level == "beginner" %}selected{% endif %}>
+                Beginner
+            </option>
+
+            <option value="intermediate"
+                {% if level == "intermediate" %}selected{% endif %}>
+                Intermediate
+            </option>
+
+            <option value="advanced"
+                {% if level == "advanced" %}selected{% endif %}>
+                Advanced
+            </option>
+
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <button class="btn btn-primary w-100">
             Search
-
         </button>
-
     </div>
 
 </form>
 
-{% if not courses %}
+    {% if not courses %}
+        <div class="alert alert-warning">
+            No courses found.
+        </div>
+    {% endif %}
 
-<div class="alert alert-warning">
+    <div class="row">
 
-    No courses found.
-
-</div>
-
-{% endif %}
-
+        {% for course in courses %}
 
         <div class="col-md-4">
 
@@ -78,14 +95,6 @@
 
             </div>
 
-        </div>
-
-        {% empty %}
-
-        <div class="col-12">
-            <div class="alert alert-info">
-                No courses available.
-            </div>
         </div>
 
         {% endfor %}
