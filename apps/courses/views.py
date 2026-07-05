@@ -95,12 +95,26 @@ def course_detail(request, pk):
             course=course
         ).exists()
 
+    progress = None
+
+    if is_enrolled:
+        enrollment = Enrollment.objects.get(
+            student=request.user,
+            course=course
+        )
+
+        progress, created = CourseProgress.objects.get_or_create(
+    student=request.user,
+    course=course,
+)
+
     return render(
         request,
         "courses/course_detail.html",
         {
             "course": course,
             "is_enrolled": is_enrolled,
+            "progress": progress,
         }
     )
     
@@ -136,7 +150,56 @@ def enroll_course(request, pk):
 
     return redirect("courses:course_detail", pk=course.pk)
 
+@login_required
+def update_progress(request, pk):
 
+    course = get_object_or_404(Course, pk=pk)
+
+    if request.user.role != "student":
+        messages.error(
+            request,
+            "Only students can update progress."
+        )
+        return redirect("courses:course_detail", pk=course.pk)
+
+    enrollment = get_object_or_404(
+        Enrollment,
+        student=request.user,
+        course=course
+    )
+
+    progress, created = CourseProgress.objects.get_or_create(
+        enrollment=enrollment
+    )
+
+    if request.method == "POST":
+
+        percent = int(request.POST.get("progress", 0))
+
+        if percent < 0:
+            percent = 0
+
+        if percent > 100:
+            percent = 100
+
+        progress.progress = percent
+
+        if percent == 100:
+            progress.completed = True
+            enrollment.status = "completed"
+            enrollment.save()
+
+        progress.save()
+
+        messages.success(
+            request,
+            "Progress updated successfully."
+        )
+
+    return redirect(
+        "courses:course_detail",
+        pk=course.pk
+    )
 
 @login_required
 def my_courses(request):

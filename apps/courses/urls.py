@@ -49,4 +49,9 @@ urlpatterns = [
         views.my_courses,
         name = "my_courses",
     ),
+    path(
+        "<int:pk>/progress/",
+        views.update_progress,
+        name="update_progress",
+    ),
 ]
