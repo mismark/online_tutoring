@@ -12,6 +12,63 @@
         My Learning
     </h2>
 
+
+    <div class="row mb-4">
+
+    <div class="col-md-4">
+
+        <div class="card border-primary shadow-sm">
+
+            <div class="card-body text-center">
+
+                <h5>Enrolled Courses</h5>
+
+                <h2>{{ total_courses }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card border-success shadow-sm">
+
+            <div class="card-body text-center">
+
+                <h5>Completed</h5>
+
+                <h2>{{ completed_courses }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card border-warning shadow-sm">
+
+            <div class="card-body text-center">
+
+                <h5>Average Progress</h5>
+
+                <h2>{{ average_progress }}%</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
     {% if enrollments %}
 
         {% for enrollment in enrollments %}

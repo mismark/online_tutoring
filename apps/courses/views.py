@@ -200,6 +200,7 @@ def update_progress(request, pk):
         "courses:course_detail",
         pk=course.pk
     )
+    
 @login_required
 def my_courses(request):
 
@@ -223,12 +224,31 @@ def my_courses(request):
         for progress in progress_records
     }
 
+    total_courses = enrollments.count()
+
+    completed_courses = progress_records.filter(
+        progress=100
+    ).count()
+
+    if total_courses > 0:
+
+        average_progress = sum(
+            p.progress for p in progress_records
+        ) / total_courses
+
+    else:
+
+        average_progress = 0
+
     return render(
         request,
         "courses/my_courses.html",
         {
             "enrollments": enrollments,
             "progress_map": progress_map,
+            "total_courses": total_courses,
+            "completed_courses": completed_courses,
+            "average_progress": round(average_progress, 1),
         }
     )
     
