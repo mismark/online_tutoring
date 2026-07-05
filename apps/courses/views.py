@@ -200,7 +200,6 @@ def update_progress(request, pk):
         "courses:course_detail",
         pk=course.pk
     )
-
 @login_required
 def my_courses(request):
 
@@ -215,11 +214,21 @@ def my_courses(request):
         student=request.user
     ).select_related("course")
 
+    progress_records = CourseProgress.objects.filter(
+        student=request.user
+    )
+
+    progress_map = {
+        progress.course_id: progress
+        for progress in progress_records
+    }
+
     return render(
         request,
         "courses/my_courses.html",
         {
-            "enrollments": enrollments
+            "enrollments": enrollments,
+            "progress_map": progress_map,
         }
     )
     

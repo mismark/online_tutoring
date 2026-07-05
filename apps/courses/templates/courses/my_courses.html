@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% load static %}
+
+{% load course_extras %}
 
 {% block title %}My Courses{% endblock %}
 
@@ -7,52 +8,67 @@
 
 <div class="container mt-4">
 
-    <h2 class="mb-4">My Enrolled Courses</h2>
+    <h2 class="mb-4">
+        My Learning
+    </h2>
 
     {% if enrollments %}
 
-    <div class="row">
-
         {% for enrollment in enrollments %}
 
-        <div class="col-md-4">
+        <div class="card mb-4 shadow">
 
-            <div class="card shadow mb-4">
+            <div class="card-body">
 
-                {% if enrollment.course.thumbnail %}
-                    <img src="{{ enrollment.course.thumbnail.url }}"
-                         class="card-img-top"
-                         style="height:220px; object-fit:cover;">
-                {% else %}
-                    <img src="{% static 'images/default-course.png' %}"
-                         class="card-img-top"
-                         style="height:220px; object-fit:cover;">
-                {% endif %}
+                <h4>
+                    {{ enrollment.course.title }}
+                </h4>
 
-                <div class="card-body">
+                <p>
+                    {{ enrollment.course.description|truncatewords:20 }}
+                </p>
 
-                    <h4>{{ enrollment.course.title }}</h4>
+                {% with progress=progress_map|get_item:enrollment.course.id %}
 
-                    <p>
-                        {{ enrollment.course.description|truncatewords:20 }}
-                    </p>
+                    {% if progress %}
 
-                    <p>
-                        <strong>Status:</strong>
-                        {{ enrollment.get_status_display }}
-                    </p>
+                    <div class="progress mb-3">
 
-                    <p>
-                        <strong>Enrolled:</strong>
-                        {{ enrollment.enrolled_at|date:"M d, Y" }}
-                    </p>
+                        <div
+                            class="progress-bar bg-success"
+                            style="width: {{ progress.progress }}%;">
 
-                    <a href="{% url 'courses:course_detail' enrollment.course.pk %}"
-                       class="btn btn-primary">
-                        View Course
-                    </a>
+                            {{ progress.progress }}%
 
-                </div>
+                        </div>
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="progress mb-3">
+
+                        <div
+                            class="progress-bar"
+                            style="width:0%;">
+
+                            0%
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+                {% endwith %}
+
+                <a
+                    href="{% url 'courses:course_detail' enrollment.course.pk %}"
+                    class="btn btn-primary">
+
+                    Continue Learning
+
+                </a>
 
             </div>
 
@@ -60,16 +76,16 @@
 
         {% endfor %}
 
-    </div>
-
     {% else %}
 
-    <div class="alert alert-info">
-        You haven't enrolled in any courses yet.
-    </div>
+        <div class="alert alert-info">
+
+            You haven't enrolled in any courses yet.
+
+        </div>
 
     {% endif %}
 
 </div>
 
-{% endblock %}
+{% endblock %} 
