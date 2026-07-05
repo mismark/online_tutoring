@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import Course, Enrollment
+from .models import Course, Enrollment, CourseProgress
 from .forms import CourseForm
 
 from django.core.paginator import Paginator
@@ -81,22 +81,7 @@ def course_list(request):
             "recent_courses": recent_courses,
         }
     )
-    
-@login_required
-def my_courses(request):
-
-    courses = Course.objects.filter(
-        teacher=request.user
-    ).order_by("-created_at")
-
-    return render(
-        request,
-        "courses/my_courses.html",
-        {
-            "courses": courses
-        }
-    )
-
+ 
 
 @login_required
 def course_detail(request, pk):
