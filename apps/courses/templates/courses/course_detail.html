@@ -80,6 +80,25 @@
                 </a>
 
             {% endif %}
+{% if request.user.role == "student" %}
+
+    {% if not is_enrolled %}
+
+        <a href="{% url 'courses:enroll_course' course.pk %}"
+           class="btn btn-success">
+            Enroll Now
+        </a>
+
+    {% else %}
+
+        <button class="btn btn-success" disabled>
+            Already Enrolled
+        </button>
+
+    {% endif %}
+
+{% endif %}
+
 
             <a href="{% url 'courses:course_list' %}"
                class="btn btn-secondary">

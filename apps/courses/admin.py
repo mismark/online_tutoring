@@ -1,11 +1,12 @@
 from django.contrib import admin
-from .models import Course
+
+from .models import Course, Enrollment
 
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
+
     list_display = (
-        "id",
         "title",
         "teacher",
         "price",
@@ -15,59 +16,31 @@ class CourseAdmin(admin.ModelAdmin):
     )
 
     list_filter = (
-        "status",
         "level",
-        "created_at",
+        "status",
     )
 
     search_fields = (
         "title",
         "description",
-        "teacher__username",
     )
 
-    list_editable = (
+
+@admin.register(Enrollment)
+class EnrollmentAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "student",
+        "course",
+        "status",
+        "enrolled_at",
+    )
+
+    list_filter = (
         "status",
     )
 
-    ordering = (
-        "-created_at",
-    )
-
-    readonly_fields = (
-        "created_at",
-        "updated_at",
-    )
-
-    fieldsets = (
-        (
-            "Course Information",
-            {
-                "fields": (
-                    "title",
-                    "description",
-                    "thumbnail",
-                    "teacher",
-                )
-            },
-        ),
-        (
-            "Course Settings",
-            {
-                "fields": (
-                    "price",
-                    "level",
-                    "status",
-                )
-            },
-        ),
-        (
-            "Dates",
-            {
-                "fields": (
-                    "created_at",
-                    "updated_at",
-                )
-            },
-        ),
+    search_fields = (
+        "student__username",
+        "course__title",
     )

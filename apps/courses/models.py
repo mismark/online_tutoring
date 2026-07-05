@@ -70,6 +70,45 @@ class Course(models.Model):
         ordering = ["-created_at"]
         verbose_name = "Course"
         verbose_name_plural = "Courses"
-
     def __str__(self):
         return self.title
+
+class Enrollment(models.Model):
+
+    STATUS_CHOICES = (
+        ("active", "Active"),
+        ("completed", "Completed"),
+        ("cancelled", "Cancelled"),
+    )
+
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="enrollments",
+        limit_choices_to={"role": "student"},
+    )
+
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name="enrollments",
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="active",
+    )
+
+    enrolled_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    class Meta:
+        unique_together = ("student", "course")
+        ordering = ["-enrolled_at"]
+
+    def __str__(self):
+        return f"{self.student.username} → {self.course.title}"    
+
+    

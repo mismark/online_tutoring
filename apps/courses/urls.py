@@ -39,4 +39,14 @@ urlpatterns = [
         views.my_courses,
         name="my_courses",
     ),
+    path(
+        "<int:pk>/enroll/",
+        views.enroll_course,
+        name="enroll_course"
+    ),
+    path(
+        "my-courses/",
+        views.my_courses,
+        name = "my_courses",
+    ),
 ]

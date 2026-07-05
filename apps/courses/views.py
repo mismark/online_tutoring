@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import Course
+from .models import Course, Enrollment
 from .forms import CourseForm
 
 from django.core.paginator import Paginator
@@ -102,14 +102,76 @@ def my_courses(request):
 def course_detail(request, pk):
     course = get_object_or_404(Course, pk=pk)
 
+    is_enrolled = False
+
+    if request.user.role == "student":
+        is_enrolled = Enrollment.objects.filter(
+            student=request.user,
+            course=course
+        ).exists()
+
     return render(
         request,
         "courses/course_detail.html",
         {
-            "course": course
+            "course": course,
+            "is_enrolled": is_enrolled,
         }
     )
+    
 
+@login_required
+def enroll_course(request, pk):
+
+    course = get_object_or_404(Course, pk=pk)
+
+    # Only students can enroll
+    if request.user.role != "student":
+        messages.error(
+            request,
+            "Only students can enroll in courses."
+        )
+        return redirect("courses:course_detail", pk=course.pk)
+
+    enrollment, created = Enrollment.objects.get_or_create(
+        student=request.user,
+        course=course
+    )
+
+    if created:
+        messages.success(
+            request,
+            "Successfully enrolled in the course!"
+        )
+    else:
+        messages.info(
+            request,
+            "You are already enrolled."
+        )
+
+    return redirect("courses:course_detail", pk=course.pk)
+
+@login_required
+def my_courses(request):
+
+    if request.user.role != "student":
+        messages.error(
+            request,
+            "Only students can access this page."
+        )
+        return redirect("courses:course_list")
+
+    enrollments = Enrollment.objects.filter(
+        student=request.user
+    ).select_related("course")
+
+    return render(
+        request,
+        "courses/my_courses.html",
+        {
+            "enrollments": enrollments
+        }
+    )
 
 @login_required
 def course_create(request):
