@@ -34,4 +34,9 @@ urlpatterns = [
         views.course_delete,
         name="course_delete"
     ),
+    path(
+        "my-courses/",
+        views.my_courses,
+        name="my_courses",
+    ),
 ]

@@ -56,6 +56,9 @@ def course_list(request):
     page_number = request.GET.get("page")
 
     courses = paginator.get_page(page_number)
+    # Recent courses
+    recent_courses = Course.objects.order_by("-created_at")[:5]
+    
 
     return render(
         request,
@@ -76,6 +79,21 @@ def course_list(request):
             "advanced_courses": Course.objects.filter(level="advanced").count(),
             
             "recent_courses": recent_courses,
+        }
+    )
+    
+@login_required
+def my_courses(request):
+
+    courses = Course.objects.filter(
+        teacher=request.user
+    ).order_by("-created_at")
+
+    return render(
+        request,
+        "courses/my_courses.html",
+        {
+            "courses": courses
         }
     )
 

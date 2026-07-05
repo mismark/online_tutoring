@@ -51,13 +51,13 @@
 
             <p>
                 <strong>Created:</strong>
-                {{ course.created_at|date:"F d, Y" }}
-            </p>
+                {{ course.created_at|date:"F d, Y - h:i A" }}
+        </p>
 
-            <p>
-                <strong>Last Updated:</strong>
-                {{ course.updated_at|date:"F d, Y" }}
-            </p>
+        <p>
+            <strong>Last Updated:</strong>
+            {{ course.updated_at|date:"F d, Y - h:i A" }}
+        </p>
 
             <hr>
 
