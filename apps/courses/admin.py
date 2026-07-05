@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Course, Enrollment
+from .models import Course, Enrollment, CourseProgress
 
 
 @admin.register(Course)
@@ -44,3 +44,22 @@ class EnrollmentAdmin(admin.ModelAdmin):
         "student__username",
         "course__title",
     )
+    
+@admin.register(CourseProgress)
+class CourseProgressAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "student",
+        "course",
+        "progress",
+        "last_accessed",
+    )
+
+    list_filter = (
+        "progress",
+    )
+
+    search_fields = (
+        "student__username",
+        "course__title",
+    )    

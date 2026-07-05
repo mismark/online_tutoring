@@ -151,6 +151,8 @@ def enroll_course(request, pk):
 
     return redirect("courses:course_detail", pk=course.pk)
 
+
+
 @login_required
 def my_courses(request):
 
@@ -172,6 +174,8 @@ def my_courses(request):
             "enrollments": enrollments
         }
     )
+    
+    
 
 @login_required
 def course_create(request):
