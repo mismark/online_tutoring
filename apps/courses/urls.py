@@ -54,4 +54,9 @@ urlpatterns = [
         views.update_progress,
         name="update_progress",
     ),
+    path(
+        "<int:pk>/certificate/",
+        views.course_certificate,
+        name="course_certificate",
+    ),
 ]

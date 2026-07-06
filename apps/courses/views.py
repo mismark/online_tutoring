@@ -200,6 +200,41 @@ def update_progress(request, pk):
         "courses:course_detail",
         pk=course.pk
     )
+
+@login_required
+def course_certificate(request, pk):
+
+    course = get_object_or_404(Course, pk=pk)
+
+    enrollment = get_object_or_404(
+        Enrollment,
+        student=request.user,
+        course=course,
+    )
+
+    progress = get_object_or_404(
+        CourseProgress,
+        student=request.user,
+        course=course,
+    )
+
+    if progress.progress < 100:
+        messages.error(
+            request,
+            "Complete the course to access your certificate."
+        )
+        return redirect("courses:course_detail", pk=course.pk)
+
+    return render(
+        request,
+        "courses/course_certificate.html",
+        {
+            "course": course,
+            "progress": progress,
+            "enrollment": enrollment,
+        }
+    )
+    
     
 @login_required
 def my_courses(request):

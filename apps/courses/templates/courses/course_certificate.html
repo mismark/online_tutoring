@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Course Certificate{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="card shadow">
+
+        <div class="card-body text-center">
+
+            <h1 class="text-success">
+                🎉 Congratulations!
+            </h1>
+
+            <hr>
+
+            <h3>
+                Certificate of Completion
+            </h3>
+
+            <p class="mt-4">
+                This certifies that
+            </p>
+
+            <h2>
+                {{ request.user.get_full_name|default:request.user.username }}
+            </h2>
+
+            <p>
+                has successfully completed
+            </p>
+
+            <h3 class="text-primary">
+                {{ course.title }}
+            </h3>
+
+            <p>
+                Progress: {{ progress.progress }}%
+            </p>
+
+            <p>
+                Completed on:
+                {{ enrollment.enrolled_at|date:"F d, Y" }}
+            </p>
+
+            <a
+                href="{% url 'courses:course_detail' course.pk %}"
+                class="btn btn-primary mt-3">
+
+                Back to Course
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

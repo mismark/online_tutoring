@@ -95,6 +95,17 @@
             Already Enrolled
         </button>
 
+        {% if progress.progress == 100 %}
+
+            <a href="{% url 'courses:course_certificate' course.pk %}"
+               class="btn btn-warning">
+
+                View Certificate
+
+            </a>
+
+        {% endif %}
+
     {% endif %}
 
 {% endif %}
