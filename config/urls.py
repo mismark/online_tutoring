@@ -14,6 +14,10 @@ urlpatterns = [
     path("accounts/", include("apps.accounts.urls")),
     # Courses
     path("courses/", include("apps.courses.urls")),
+    path(
+    "certificates/",
+    include("apps.certificates.urls"),
+),
 ]
 
 if settings.DEBUG:

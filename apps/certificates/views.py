@@ -1,3 +1,19 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
-# Create your views here.
+from .models import Certificate
+
+
+def verify_certificate(request, certificate_id):
+
+    certificate = get_object_or_404(
+        Certificate,
+        certificate_id=certificate_id
+    )
+
+    return render(
+        request,
+        "certificates/verify.html",
+        {
+            "certificate": certificate
+        }
+    )
