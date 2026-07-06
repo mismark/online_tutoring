@@ -59,4 +59,9 @@ urlpatterns = [
         views.course_certificate,
         name="course_certificate",
     ),
+    path(
+    "<int:pk>/certificate/download/",
+    views.download_certificate,
+    name="download_certificate",
+),
 ]

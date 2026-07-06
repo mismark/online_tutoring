@@ -45,15 +45,23 @@
                 {{ enrollment.enrolled_at|date:"F d, Y" }}
             </p>
 
-            <a
-                href="{% url 'courses:course_detail' course.pk %}"
-                class="btn btn-primary mt-3">
+            <div class="mt-4">
 
-                Back to Course
+    <a href="{% url 'courses:download_certificate' course.pk %}"
+       class="btn btn-success">
+        📄 Download PDF
+    </a>
 
-            </a>
+    <a href="{% url 'courses:course_detail' course.pk %}"
+       class="btn btn-primary">
+        Back to Course
+    </a>
+
+</div>
 
         </div>
+
+
 
     </div>
 

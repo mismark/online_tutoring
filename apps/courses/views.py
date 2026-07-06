@@ -8,6 +8,33 @@ from .forms import CourseForm
 from django.core.paginator import Paginator
 from django.db.models import Q
 
+# import the necessary  module and liberary for pdf generations 
+from io import BytesIO
+from reportlab.platypus import (
+    SimpleDocTemplate,
+    Paragraph,
+    Spacer,
+)
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.enums import TA_CENTER
+from reportlab.lib.colors import darkblue
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib.pagesizes import A4
+
+from django.http import HttpResponse
+
+from django.shortcuts import render, redirect, get_object_or_404
+
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+
+# from .models import Course, Enrollment, CourseProgress
+# from .forms import CourseForm
+
+# from django.core.paginator import Paginator
+# from django.db.models import Q
+
+
 @login_required
 def course_list(request):
 
@@ -235,6 +262,75 @@ def course_certificate(request, pk):
         }
     )
     
+# for couce certificate generations and download as pdf file 
+
+@login_required
+def download_certificate(request, pk):
+
+    course = get_object_or_404(Course, pk=pk)
+
+    progress = get_object_or_404(
+        CourseProgress,
+        student=request.user,
+        course=course,
+    )
+
+    if progress.progress < 100:
+        messages.error(
+            request,
+            "Complete the course first."
+        )
+        return redirect("courses:course_detail", pk=pk)
+
+    buffer = BytesIO()
+
+    doc = SimpleDocTemplate(buffer)
+
+    styles = getSampleStyleSheet()
+
+    title = styles["Title"]
+    title.alignment = TA_CENTER
+
+    heading = styles["Heading2"]
+    heading.alignment = TA_CENTER
+
+    normal = styles["BodyText"]
+    normal.alignment = TA_CENTER
+
+    story = []
+
+    story.append(Paragraph("Certificate of Completion", title))
+    story.append(Paragraph("<br/><br/>", normal))
+    story.append(
+        Paragraph(
+            f"This certifies that <b>{request.user.get_full_name() or request.user.username}</b>",
+            heading,
+        )
+    )
+
+    story.append(Paragraph("<br/>has successfully completed<br/><br/>", normal))
+
+    story.append(
+        Paragraph(
+            f"<b>{course.title}</b>",
+            heading,
+        )
+    )
+
+    story.append(Paragraph("<br/><br/>Congratulations!", normal))
+
+    doc.build(story)
+
+    pdf = buffer.getvalue()
+    buffer.close()
+
+    response = HttpResponse(pdf, content_type="application/pdf")
+    response["Content-Disposition"] = (
+        f'attachment; filename="{course.title}_certificate.pdf"'
+    )
+
+    return response
+ 
     
 @login_required
 def my_courses(request):
