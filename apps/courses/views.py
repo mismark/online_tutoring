@@ -13,7 +13,7 @@ from io import BytesIO
 from reportlab.platypus import (
     SimpleDocTemplate,
     Paragraph,
-    Spacer,
+    Image,
 )
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.enums import TA_CENTER
@@ -28,11 +28,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 
-# from .models import Course, Enrollment, CourseProgress
-# from .forms import CourseForm
+# qr code generation 
+import qrcode
 
-# from django.core.paginator import Paginator
-# from django.db.models import Q
+from reportlab.lib.utils import ImageReader
+from apps.certificates.models import Certificate
 
 
 @login_required
@@ -282,6 +282,22 @@ def download_certificate(request, pk):
         )
         return redirect("courses:course_detail", pk=pk)
 
+    certificate = get_object_or_404(
+        Certificate,
+        student=request.user,
+        course=course,
+    )
+
+    verification_url = request.build_absolute_uri(
+        f"/certificates/verify/{certificate.certificate_id}/"
+    )
+
+    qr = qrcode.make(verification_url)
+
+    qr_buffer = BytesIO()
+    qr.save(qr_buffer, format="PNG")
+    qr_buffer.seek(0)
+
     buffer = BytesIO()
 
     doc = SimpleDocTemplate(buffer)
@@ -299,8 +315,15 @@ def download_certificate(request, pk):
 
     story = []
 
-    story.append(Paragraph("Certificate of Completion", title))
+    story.append(
+        Paragraph(
+            "Certificate of Completion",
+            title,
+        )
+    )
+
     story.append(Paragraph("<br/><br/>", normal))
+
     story.append(
         Paragraph(
             f"This certifies that <b>{request.user.get_full_name() or request.user.username}</b>",
@@ -308,7 +331,12 @@ def download_certificate(request, pk):
         )
     )
 
-    story.append(Paragraph("<br/>has successfully completed<br/><br/>", normal))
+    story.append(
+        Paragraph(
+            "<br/>has successfully completed<br/><br/>",
+            normal,
+        )
+    )
 
     story.append(
         Paragraph(
@@ -317,14 +345,62 @@ def download_certificate(request, pk):
         )
     )
 
-    story.append(Paragraph("<br/><br/>Congratulations!", normal))
+    story.append(Paragraph("<br/>", normal))
+
+    story.append(
+        Paragraph(
+            f"Progress: {progress.progress}%",
+            normal,
+        )
+    )
+
+    story.append(
+        Paragraph(
+            f"Certificate ID:<br/><b>{certificate.certificate_id}</b>",
+            normal,
+        )
+    )
+
+    story.append(Paragraph("<br/>", normal))
+
+    story.append(
+        Paragraph(
+            "Scan this QR Code to verify this certificate.",
+            normal,
+        )
+    )
+
+    story.append(Paragraph("<br/>", normal))
+
+    qr_image = Image(
+        qr_buffer,
+        width=120,
+        height=120,
+    )
+
+    story.append(qr_image)
+
+    story.append(Paragraph("<br/>", normal))
+
+    story.append(
+        Paragraph(
+            "Congratulations!",
+            heading,
+        )
+    )
 
     doc.build(story)
 
     pdf = buffer.getvalue()
-    buffer.close()
 
-    response = HttpResponse(pdf, content_type="application/pdf")
+    buffer.close()
+    qr_buffer.close()
+
+    response = HttpResponse(
+        pdf,
+        content_type="application/pdf"
+    )
+
     response["Content-Disposition"] = (
         f'attachment; filename="{course.title}_certificate.pdf"'
     )
