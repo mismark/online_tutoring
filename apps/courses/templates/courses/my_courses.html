@@ -12,62 +12,90 @@
         My Learning
     </h2>
 
+    <!-- Search & Filter -->
+    <form method="GET" class="row mb-4">
 
+        <div class="col-md-6">
+            <input
+                type="text"
+                name="q"
+                class="form-control"
+                placeholder="Search my courses..."
+                value="{{ query }}">
+        </div>
+
+        <div class="col-md-4">
+
+            <select
+                name="status"
+                class="form-select">
+
+                <option value="">All Status</option>
+
+                <option value="active"
+                    {% if status == "active" %}selected{% endif %}>
+                    Active
+                </option>
+
+                <option value="completed"
+                    {% if status == "completed" %}selected{% endif %}>
+                    Completed
+                </option>
+
+                <option value="cancelled"
+                    {% if status == "cancelled" %}selected{% endif %}>
+                    Cancelled
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="col-md-2">
+            <button class="btn btn-primary w-100">
+                Search
+            </button>
+        </div>
+
+    </form>
+
+    {% if not enrollments %}
+    <div class="alert alert-warning">
+        No matching courses found.
+    </div>
+    {% endif %}
+
+    <!-- Statistics -->
     <div class="row mb-4">
 
-    <div class="col-md-4">
-
-        <div class="card border-primary shadow-sm">
-
-            <div class="card-body text-center">
-
-                <h5>Enrolled Courses</h5>
-
-                <h2>{{ total_courses }}</h2>
-
+        <div class="col-md-4">
+            <div class="card border-primary shadow-sm">
+                <div class="card-body text-center">
+                    <h5>Enrolled Courses</h5>
+                    <h2>{{ total_courses }}</h2>
+                </div>
             </div>
+        </div>
 
+        <div class="col-md-4">
+            <div class="card border-success shadow-sm">
+                <div class="card-body text-center">
+                    <h5>Completed</h5>
+                    <h2>{{ completed_courses }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-warning shadow-sm">
+                <div class="card-body text-center">
+                    <h5>Average Progress</h5>
+                    <h2>{{ average_progress }}%</h2>
+                </div>
+            </div>
         </div>
 
     </div>
-
-    <div class="col-md-4">
-
-        <div class="card border-success shadow-sm">
-
-            <div class="card-body text-center">
-
-                <h5>Completed</h5>
-
-                <h2>{{ completed_courses }}</h2>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="col-md-4">
-
-        <div class="card border-warning shadow-sm">
-
-            <div class="card-body text-center">
-
-                <h5>Average Progress</h5>
-
-                <h2>{{ average_progress }}%</h2>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-
-
 
     {% if enrollments %}
 
@@ -77,9 +105,7 @@
 
             <div class="card-body">
 
-                <h4>
-                    {{ enrollment.course.title }}
-                </h4>
+                <h4>{{ enrollment.course.title }}</h4>
 
                 <p>
                     {{ enrollment.course.description|truncatewords:20 }}
@@ -145,4 +171,4 @@
 
 </div>
 
-{% endblock %} 
+{% endblock %}
