@@ -282,11 +282,10 @@ def download_certificate(request, pk):
         )
         return redirect("courses:course_detail", pk=pk)
 
-    certificate = get_object_or_404(
-        Certificate,
-        student=request.user,
-        course=course,
-    )
+    certificate, created = Certificate.objects.get_or_create(
+    student=request.user,
+    course=course,
+)
 
     verification_url = request.build_absolute_uri(
         f"/certificates/verify/{certificate.certificate_id}/"
