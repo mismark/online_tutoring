@@ -1,3 +1,5 @@
+from pydoc import doc
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 # from django.shortcuts import render, redirect, get_object_or_404
@@ -298,8 +300,34 @@ def download_certificate(request, pk):
     # Create certificate record if it does not exist
 
     certificate, created = Certificate.objects.get_or_create(
-        student=request.user,
-        course=course,
+    student=request.user,
+    course=course,
+    )
+
+
+    # QR CODE VERIFICATION LINK
+    qr_data = request.build_absolute_uri(
+        f"/certificates/verify/{certificate.certificate_id}/"
+    )
+
+
+    qr = qrcode.make(qr_data)
+
+
+    qr_buffer = BytesIO()
+
+    qr.save(
+        qr_buffer,
+        format="PNG"
+    )
+
+    qr_buffer.seek(0)
+
+
+    qr_image = Image(
+        qr_buffer,
+        width=100,
+        height=100,
     )
 
 
@@ -403,19 +431,42 @@ def download_certificate(request, pk):
 
 
     story.append(
-        Paragraph(
-            f"""
-            Certificate ID:
-            <b>{certificate.certificate_id}</b>
-            """,
-            normal
-        )
+    Paragraph(
+        f"""
+        Certificate ID:
+        <b>{certificate.certificate_id}</b>
+        """,
+        normal
     )
+)
+
+
+    story.append(
+        Spacer(1,30)
+    )
+
+
+    story.append(
+        qr_image
+    )
+
+
+    story.append(
+        Spacer(1,10)
+    )
+
+
+    story.append(
+            Paragraph(
+                "Scan to Verify Certificate",
+                normal
+            )
+        )
 
 
     doc.build(
-        story
-    )
+            story
+        )
 
 
     pdf = buffer.getvalue()

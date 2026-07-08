@@ -1,37 +1,66 @@
 {% extends "base.html" %}
 
+
 {% block content %}
 
 <div class="container mt-5">
 
-    <div class="alert alert-success">
+    <div class="card shadow">
 
-        <h2>Certificate Verified ✅</h2>
+        <div class="card-body text-center">
 
-        <hr>
 
-        <p>
-            <strong>Student:</strong>
-            {{ certificate.student.get_full_name|default:certificate.student.username }}
-        </p>
+            <h1 class="text-success">
+                Certificate Verified ✓
+            </h1>
 
-        <p>
-            <strong>Course:</strong>
-            {{ certificate.course.title }}
-        </p>
 
-        <p>
-            <strong>Issued:</strong>
-            {{ certificate.issued_at }}
-        </p>
+            <hr>
 
-        <p>
-            <strong>Certificate ID:</strong>
-            {{ certificate.certificate_id }}
-        </p>
+
+            <h3>
+                {{ certificate.student.get_full_name }}
+            </h3>
+
+
+            <p>
+                has successfully completed
+            </p>
+
+
+            <h4>
+                {{ certificate.course.title }}
+            </h4>
+
+
+            <br>
+
+
+            <p>
+                Certificate Number:
+                <strong>
+                    {{ certificate.certificate_number }}
+                </strong>
+            </p>
+
+
+            <p>
+                Issued Date:
+                {{ certificate.issued_at|date:"F d, Y" }}
+            </p>
+
+
+            <p>
+                Certificate ID:
+                {{ certificate.certificate_id }}
+            </p>
+
+
+        </div>
 
     </div>
 
 </div>
+
 
 {% endblock %}

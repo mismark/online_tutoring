@@ -9,28 +9,13 @@ def verify_certificate(request, certificate_id):
         Certificate,
         certificate_id=certificate_id
     )
-    
-    certificate = Certificate.objects.get(
-    student=request.user,
-    course=course,
-  )
 
-    return render(
-
-    request,
-
-    "courses/certificate.html",
-
-    {
-
-        "course":course,
-
-        "progress":progress,
-
-        "certificate":certificate,
-
-        "qr_code":qr_code,
-
+    context = {
+        "certificate": certificate
     }
 
-)
+    return render(
+        request,
+        "certificates/verify.html",
+        context
+    )
