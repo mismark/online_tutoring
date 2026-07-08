@@ -6,21 +6,24 @@ from .models import Certificate
 
 def verify_certificate(request, certificate_id):
 
-    certificate = get_object_or_404(
-        Certificate,
-        certificate_id=certificate_id
-    )
+
+    try:
+
+        certificate = Certificate.objects.get(
+            certificate_id=certificate_id
+        )
 
 
-    context = {
+    except Certificate.DoesNotExist:
 
-        "certificate": certificate
+        certificate = None
 
-    }
 
 
     return render(
         request,
         "certificates/verify_certificate.html",
-        context
+        {
+            "certificate": certificate
+        }
     )

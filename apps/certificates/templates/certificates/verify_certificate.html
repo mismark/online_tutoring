@@ -7,87 +7,83 @@
 <div class="container mt-5">
 
 
-<div class="card shadow p-5 text-center">
+    <div class="card shadow p-5 text-center">
 
 
-<!-- Logo Top -->
-<div class="mb-4">
-
-    <img 
-    src="{{ MEDIA_URL }}certificates/logo.png"
-    alt="Certificate Logo"
-    width="150"
-    height="150">
-
-</div>
+        {% if certificate %}
 
 
-<h1 class="text-success">
-    ✅ Certificate Verified
-</h1>
+        <h1 class="text-success">
+            ✓ Certificate Valid
+        </h1>
 
 
-<hr>
+        <hr>
 
 
-<h3>
-{{ certificate.student.get_full_name }}
-</h3>
+        <h3>
+            {{ certificate.student.get_full_name }}
+        </h3>
 
 
-<p>
-has successfully completed
-</p>
+        <p class="mt-3">
+
+            has successfully completed
+
+        </p>
 
 
-<h2>
-{{ certificate.course.title }}
-</h2>
-
-
-<hr>
-
-
-<p>
-<strong>
-Certificate Number:
-</strong>
-
-{{ certificate.certificate_number }}
-
-</p>
-
-
-<p>
-<strong>
-Certificate ID:
-</strong>
-
-{{ certificate.certificate_id }}
-
-</p>
-
-
-<p>
-<strong>
-Issued Date:
-</strong>
-
-{{ certificate.issued_at|date:"d F Y" }}
-
-</p>
+        <h4>
+            {{ certificate.course.title }}
+        </h4>
 
 
 
-<a href="{% url 'courses:download_certificate' certificate.course.id %}"
-class="btn btn-primary">
-
-Download Certificate PDF
-
-</a>
+        <hr>
 
 
-</div>
+        <p>
+            Certificate Number:
+            <b>
+            {{ certificate.certificate_number }}
+            </b>
+        </p>
+
+
+        <p>
+            Certificate ID:
+            <b>
+            {{ certificate.certificate_id }}
+            </b>
+        </p>
+
+
+        <p>
+            Issued Date:
+            <b>
+            {{ certificate.issued_at|date:"F d, Y" }}
+            </b>
+        </p>
+
+
+
+        {% else %}
+
+
+        <h1 class="text-danger">
+            ✗ Invalid Certificate
+        </h1>
+
+
+        <p>
+            This certificate does not exist.
+        </p>
+
+
+        {% endif %}
+
+
+    </div>
 
 
 </div>
