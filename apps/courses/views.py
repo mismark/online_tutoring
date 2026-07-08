@@ -1,5 +1,9 @@
 from pydoc import doc
 
+import os
+
+from django.conf import settings
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 # from django.shortcuts import render, redirect, get_object_or_404
@@ -266,10 +270,79 @@ def course_certificate(request, pk):
         }
     )
     
+
+def add_certificate_images(canvas, doc):
+
+    canvas.saveState()
+
+    seal_path = os.path.join(
+        settings.MEDIA_ROOT,
+        "certificates",
+        "seal.png"
+    )
+
+    signature_path = os.path.join(
+        settings.MEDIA_ROOT,
+        "certificates",
+        "signature.png"
+    )
+
+
+    if os.path.exists(seal_path):
+
+        canvas.drawImage(
+            seal_path,
+            430,
+            60,
+            width=80,
+            height=80,
+            mask="auto"
+        )
+
+
+    if os.path.exists(signature_path):
+
+        canvas.drawImage(
+            signature_path,
+            80,
+            60,
+            width=120,
+            height=50,
+            mask="auto"
+        )
+
+
+    canvas.setFont(
+        "Helvetica",
+        9
+    )
+
+    canvas.drawString(
+        430,
+        45,
+        "Official Seal"
+    )
+
+    canvas.drawString(
+        80,
+        45,
+        "Authorized Signature"
+    )
+
+
+    canvas.restoreState()
+
 # for couce certificate generations and download as pdf file 
 
 @login_required
 def download_certificate(request, pk):
+    
+    from reportlab.platypus import Image as PDFImage
+    from reportlab.lib.pagesizes import landscape
+    from reportlab.lib.units import inch
+    from reportlab.pdfgen import canvas
+    from django.conf import settings
+    import os
 
     course = get_object_or_404(
         Course,
@@ -335,14 +408,21 @@ def download_certificate(request, pk):
 
 
     doc = SimpleDocTemplate(
-        buffer
-    )
+    buffer,
+    pagesize=landscape(A4)
+)
 
 
     styles = getSampleStyleSheet()
 
 
-    title = styles["Title"]
+    title = ParagraphStyle(
+    "CertificateTitle",
+    parent=styles["Title"],
+    alignment=TA_CENTER,
+    fontSize=32,
+    textColor=darkblue,
+)
     title.alignment = TA_CENTER
 
 
@@ -355,6 +435,27 @@ def download_certificate(request, pk):
 
 
     story = []
+    
+    logo_path = os.path.join(
+    settings.MEDIA_ROOT,
+    "certificates/logo.png"
+)
+
+
+    if os.path.exists(logo_path):
+
+        logo = PDFImage(
+            logo_path,
+            width=120,
+            height=120
+        )
+
+        story.append(logo)
+
+
+    story.append(
+        Spacer(1,20)
+    )
 
 
     story.append(
@@ -462,11 +563,47 @@ def download_certificate(request, pk):
                 normal
             )
         )
+    
+    story.append(
+    Spacer(1,30)
+)
+
+
+    story.append(
+        Paragraph(
+            f"""
+            Issued Date:
+            <b>
+            {certificate.issued_at.strftime("%B %d, %Y")}
+            </b>
+            """,
+            normal
+        )
+    )
+
+
+    def add_border(canvas, doc):
+
+        canvas.saveState()
+
+        canvas.setLineWidth(3)
+
+        canvas.rect(
+            20,
+            20,
+            landscape(A4)[0]-40,
+            landscape(A4)[1]-40
+        )
+
+        canvas.restoreState()
+
 
 
     doc.build(
-            story
-        )
+    story,
+    onFirstPage=add_certificate_images,
+    onLaterPages=add_certificate_images
+)
 
 
     pdf = buffer.getvalue()
