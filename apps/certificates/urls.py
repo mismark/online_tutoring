@@ -12,5 +12,11 @@ urlpatterns = [
         views.verify_certificate,
         name="verify_certificate"
     ),
+    
+    path(
+        "my-certificates/",
+        views.certificate_list,
+        name = "certificate_list"
+    ),
 
 ]

@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+<div class="container mt-5">
+
+
+<h2 class="text-center mb-4">
+    My Certificates
+</h2>
+
+
+
+{% if certificates %}
+
+
+<div class="row">
+
+
+{% for certificate in certificates %}
+
+
+<div class="col-md-6 mb-4">
+
+
+<div class="card shadow p-4">
+
+
+<h4>
+{{ certificate.course.title }}
+</h4>
+
+
+<hr>
+
+
+<p>
+Certificate Number:
+<br>
+
+<b>
+{{ certificate.certificate_number }}
+</b>
+
+</p>
+
+
+
+<p>
+
+Issued:
+
+<b>
+{{ certificate.issued_at|date:"F d, Y" }}
+</b>
+
+</p>
+
+
+
+<div class="mt-3">
+
+
+<a href="{% url 'courses:download_certificate' certificate.course.id %}"
+class="btn btn-primary">
+
+Download PDF
+
+</a>
+
+
+
+<a href="{% url 'certificates:verify_certificate' certificate.certificate_id %}"
+class="btn btn-success">
+
+Verify
+
+</a>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+{% endfor %}
+
+
+</div>
+
+
+{% else %}
+
+
+<div class="alert alert-info text-center">
+
+You do not have any certificates yet.
+
+</div>
+
+
+{% endif %}
+
+
+
+</div>
+
+
+{% endblock %}
