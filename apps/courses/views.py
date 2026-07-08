@@ -649,6 +649,22 @@ def download_certificate(request, pk):
 
 
     pdf = buffer.getvalue()
+        
+        
+    from apps.certificates.utils import send_certificate_email
+
+
+
+    send_certificate_email(
+
+        request.user,
+
+        certificate,
+
+        pdf
+
+    )
+
 
     buffer.close()
 
