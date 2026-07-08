@@ -19,6 +19,7 @@ urlpatterns = [
     "certificates/",
     include("apps.certificates.urls"),
 ),
+    
 ]
 
 if settings.DEBUG:

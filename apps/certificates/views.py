@@ -10,9 +10,11 @@ def verify_certificate(request, certificate_id):
         certificate_id=certificate_id
     )
 
+
     context = {
         "certificate": certificate
     }
+
 
     return render(
         request,
