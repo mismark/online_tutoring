@@ -1,70 +1,106 @@
 {% extends "base.html" %}
 
-{% block title %}Course Certificate{% endblock %}
 
 {% block content %}
 
 <div class="container mt-5">
 
-    <div class="card shadow">
 
-        <div class="card-body text-center">
+<div class="card shadow">
 
-            <h1 class="text-success">
-                🎉 Congratulations!
-            </h1>
 
-            <hr>
+<div class="card-body text-center">
 
-            <h3>
-                Certificate of Completion
-            </h3>
 
-            <p class="mt-4">
-                This certifies that
-            </p>
+<h1 class="text-success">
+🎉 Course Completed
+</h1>
 
-            <h2>
-                {{ request.user.get_full_name|default:request.user.username }}
-            </h2>
 
-            <p>
-                has successfully completed
-            </p>
+<hr>
 
-            <h3 class="text-primary">
-                {{ course.title }}
-            </h3>
 
-            <p>
-                Progress: {{ progress.progress }}%
-            </p>
+<h3>
+{{ course.title }}
+</h3>
 
-            <p>
-                Completed on:
-                {{ enrollment.enrolled_at|date:"F d, Y" }}
-            </p>
 
-            <div class="mt-4">
+<p>
+Congratulations!
+You have successfully completed this course.
+</p>
 
-    <a href="{% url 'courses:download_certificate' course.pk %}"
-       class="btn btn-success">
-        📄 Download PDF
-    </a>
 
-    <a href="{% url 'courses:course_detail' course.pk %}"
-       class="btn btn-primary">
-        Back to Course
-    </a>
+<br>
+
+
+<div class="progress">
+
+<div 
+class="progress-bar"
+role="progressbar"
+style="width: {{ progress.progress }}%;"
+>
+
+{{ progress.progress }}%
 
 </div>
 
-        </div>
+</div>
 
 
+<br>
 
-    </div>
+
+{% if progress.progress == 100 %}
+
+
+<a 
+href="{% url 'courses:download_certificate' course.pk %}"
+class="btn btn-success btn-lg"
+>
+
+<i class="fa fa-download"></i>
+Download Certificate
+
+</a>
+
+
+{% else %}
+
+
+<div class="alert alert-warning">
+
+Complete 100% of the course to download your certificate.
 
 </div>
+
+
+{% endif %}
+
+
+
+<br><br>
+
+
+<a 
+href="{% url 'courses:course_detail' course.pk %}"
+class="btn btn-secondary"
+>
+
+Back to Course
+
+</a>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
 
 {% endblock %}
