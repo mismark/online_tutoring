@@ -273,128 +273,6 @@ def course_certificate(request, pk):
     )
     
 
-def add_certificate_images(canvas, doc):
-
-    canvas.saveState()
-
-
-    width, height = landscape(A4)
-
-
-    # Border
-
-    canvas.setLineWidth(4)
-
-    canvas.rect(
-        30,
-        30,
-        width - 60,
-        height - 60
-    )
-
-
-    canvas.setLineWidth(1)
-
-    canvas.rect(
-        45,
-        45,
-        width - 90,
-        height - 90
-    )
-
-
-
-    # Logo
-
-    logo_path = os.path.join(
-        settings.MEDIA_ROOT,
-        "certificates/logo.png"
-    )
-
-
-    if os.path.exists(logo_path):
-
-        canvas.drawImage(
-            logo_path,
-            350,
-            470,
-            width=100,
-            height=60,
-            preserveAspectRatio=True,
-            mask="auto"
-        )
-
-
-
-    # Signature
-
-    signature_path = os.path.join(
-        settings.MEDIA_ROOT,
-        "certificates/signature.png"
-    )
-
-
-    if os.path.exists(signature_path):
-
-        canvas.drawImage(
-            signature_path,
-            120,
-            80,
-            width=120,
-            height=50,
-            mask="auto"
-        )
-
-
-    canvas.setFont(
-        "Helvetica",
-        10
-    )
-
-    canvas.drawString(
-        130,
-        65,
-        "Authorized Signature"
-    )
-
-
-
-    # Seal
-
-    seal_path = os.path.join(
-        settings.MEDIA_ROOT,
-        "certificates/seal.png"
-    )
-
-
-    if os.path.exists(seal_path):
-
-        canvas.drawImage(
-            seal_path,
-            620,
-            80,
-            width=90,
-            height=90,
-            mask="auto"
-        )
-
-
-    canvas.setFont(
-        "Helvetica",
-        10
-    )
-
-
-    canvas.drawString(
-        625,
-        65,
-        "Official Seal"
-    )
-
-
-
-    canvas.restoreState()
-
 # for couce certificate generations and download as pdf file 
 
 @login_required
@@ -406,6 +284,102 @@ def download_certificate(request, pk):
     from reportlab.pdfgen import canvas
     from django.conf import settings
     import os
+    
+    
+        
+    def add_certificate_images(canvas, doc):
+
+        canvas.saveState()
+
+
+        # =====================
+        # BORDER
+        # =====================
+
+        canvas.setLineWidth(3)
+
+        canvas.rect(
+            20,
+            20,
+            842-40,
+            595-40
+        )
+
+
+        # =====================
+        # LOGO
+        # =====================
+
+        logo_path = os.path.join(
+            settings.MEDIA_ROOT,
+            "certificates",
+            "logo.png"
+        )
+
+
+        print("LOGO:", logo_path)
+        print("EXISTS:", os.path.exists(logo_path))
+
+
+        if os.path.exists(logo_path):
+
+            canvas.drawImage(
+                ImageReader(logo_path),
+                371,
+                470,
+                width=100,
+                height=100,
+                mask="auto"
+            )
+
+
+        # =====================
+        # SIGNATURE
+        # =====================
+
+        signature_path = os.path.join(
+            settings.MEDIA_ROOT,
+            "certificates",
+            "signature.png"
+        )
+
+
+        if os.path.exists(signature_path):
+
+            canvas.drawImage(
+                ImageReader(signature_path),
+                120,
+                60,
+                width=120,
+                height=50,
+                mask="auto"
+            )
+
+
+        # =====================
+        # SEAL
+        # =====================
+
+        seal_path = os.path.join(
+            settings.MEDIA_ROOT,
+            "certificates",
+            "seal.png"
+        )
+
+
+        if os.path.exists(seal_path):
+
+            canvas.drawImage(
+                ImageReader(seal_path),
+                650,
+                50,
+                width=100,
+                height=100,
+                mask="auto"
+            )
+
+
+        canvas.restoreState()
 
     course = get_object_or_404(
         Course,
@@ -502,7 +476,7 @@ def download_certificate(request, pk):
     
     
     story.append(
-    Spacer(1,30)
+    Spacer(1,80)
     )
 
 
@@ -535,25 +509,6 @@ def download_certificate(request, pk):
     )
 
 
-
-
-    
-    
-    logo_path = os.path.join(
-    settings.MEDIA_ROOT,
-    "certificates/logo.png"
-)
-
-
-    if os.path.exists(logo_path):
-
-        logo = PDFImage(
-            logo_path,
-            width=120,
-            height=120
-        )
-
-        story.append(logo)
 
 
     story.append(
@@ -642,7 +597,7 @@ def download_certificate(request, pk):
         """,
         normal
     )
-)
+   )
 
 
     story.append(
@@ -669,7 +624,7 @@ def download_certificate(request, pk):
     
     story.append(
     Spacer(1,30)
-)
+   )
 
 
     story.append(
@@ -683,77 +638,6 @@ def download_certificate(request, pk):
             normal
         )
     )
-
-
-    def add_certificate_images(canvas, doc):
-
-        canvas.saveState()
-
-        # Border
-        canvas.setLineWidth(3)
-
-        canvas.rect(
-            20,
-            20,
-            landscape(A4)[0]-40,
-            landscape(A4)[1]-40
-        )
-
-
-        # Signature
-        signature_path = os.path.join(
-            settings.MEDIA_ROOT,
-            "certificates/signature.png"
-        )
-
-
-        if os.path.exists(signature_path):
-
-            canvas.drawImage(
-                signature_path,
-                120,
-                60,
-                width=120,
-                height=50,
-                preserveAspectRatio=True,
-                mask="auto"
-            )
-
-
-        # Seal
-        seal_path = os.path.join(
-            settings.MEDIA_ROOT,
-            "certificates/seal.png"
-        )
-
-
-        if os.path.exists(seal_path):
-
-            canvas.drawImage(
-                seal_path,
-                650,
-                50,
-                width=100,
-                height=100,
-                preserveAspectRatio=True,
-                mask="auto"
-            )
-
-
-        canvas.setFont(
-            "Helvetica",
-            10
-        )
-
-
-        canvas.drawString(
-            140,
-            45,
-            "Authorized Signature"
-        )
-
-
-        canvas.restoreState()
 
 
 

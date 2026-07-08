@@ -3,10 +3,27 @@
 
 {% block content %}
 
+
 <div class="container mt-5">
 
-<h1>
-Certificate Verification
+
+<div class="card shadow p-5 text-center">
+
+
+<!-- Logo Top -->
+<div class="mb-4">
+
+    <img 
+    src="{{ MEDIA_URL }}certificates/logo.png"
+    alt="Certificate Logo"
+    width="150"
+    height="150">
+
+</div>
+
+
+<h1 class="text-success">
+    ✅ Certificate Verified
 </h1>
 
 
@@ -14,40 +31,63 @@ Certificate Verification
 
 
 <h3>
-Certificate is Valid ✅
+{{ certificate.student.get_full_name }}
 </h3>
 
 
 <p>
-Certificate Number:
-<b>
-{{ certificate.certificate_number }}
-</b>
+has successfully completed
 </p>
 
 
-<p>
-Student:
-<b>
-{{ certificate.student.get_full_name }}
-</b>
-</p>
-
-
-<p>
-Course:
-<b>
+<h2>
 {{ certificate.course.title }}
-</b>
+</h2>
+
+
+<hr>
+
+
+<p>
+<strong>
+Certificate Number:
+</strong>
+
+{{ certificate.certificate_number }}
+
 </p>
 
 
 <p>
-Issued Date:
-<b>
-{{ certificate.issued_at|date:"d M Y" }}
-</b>
+<strong>
+Certificate ID:
+</strong>
+
+{{ certificate.certificate_id }}
+
 </p>
+
+
+<p>
+<strong>
+Issued Date:
+</strong>
+
+{{ certificate.issued_at|date:"d F Y" }}
+
+</p>
+
+
+
+<a href="{% url 'courses:download_certificate' certificate.course.id %}"
+class="btn btn-primary">
+
+Download Certificate PDF
+
+</a>
+
+
+</div>
 
 
 </div>
