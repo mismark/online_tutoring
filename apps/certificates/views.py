@@ -1,5 +1,4 @@
 from django.shortcuts import render, get_object_or_404
-
 from .models import Certificate
 
 
@@ -10,14 +9,12 @@ def verify_certificate(request, certificate_id):
         certificate_id=certificate_id
     )
 
-
     context = {
-        "certificate": certificate
+        "certificate": certificate,
     }
-
 
     return render(
         request,
-        "certificates/verify.html",
+        "certificates/verify_certificate.html",
         context
     )
