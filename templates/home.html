@@ -1,34 +1,446 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
-{% block title %}
+{% load static %}
 
-Home
-
-{% endblock %}
 
 {% block content %}
 
-<div class="container py-5">
 
-    <h1 class="display-4">
+<div class="dashboard-wrapper">
 
-        Welcome to Online Tutoring
 
-    </h1>
+    <!-- Sidebar -->
+    {% include "includes/sidebar.html" %}
 
-    <p class="lead">
 
-        Learn Anytime, Anywhere.
 
-    </p>
+    <!-- Main Content -->
+    <main class="dashboard-content">
 
-    <a href="#"
-       class="btn btn-primary">
 
-        Get Started
+        <!-- Top Header -->
+        <div class="dashboard-header">
 
-    </a>
+
+            <div>
+                <h1>
+                    Welcome,
+                    {{ request.user.first_name|default:request.user.username }}
+                    👋
+                </h1>
+
+                <p>
+                    Continue your learning journey with Online Tutor.
+                </p>
+
+            </div>
+
+
+
+            <div class="profile-dropdown">
+
+
+                {% if request.user.profile_picture %}
+
+
+                <img src="{{ request.user.profile_picture.url }}"
+                     class="header-profile">
+
+
+                {% else %}
+
+
+                <img src="{% static 'images/default.png' %}"
+                     class="header-profile">
+
+
+                {% endif %}
+
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+
+        <!-- Statistics Cards -->
+
+        <section class="stats">
+
+
+            <div class="stat-card">
+
+
+                <i class="fas fa-book"></i>
+
+
+                <div>
+
+                    <h3>
+                        {{ enrolled_courses|default:"0" }}
+                    </h3>
+
+
+                    <p>
+                        My Courses
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+            <div class="stat-card">
+
+
+                <i class="fas fa-video"></i>
+
+
+                <div>
+
+                    <h3>
+                        {{ lessons_completed|default:"0" }}
+                    </h3>
+
+
+                    <p>
+                        Completed Lessons
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+            <div class="stat-card">
+
+
+                <i class="fas fa-certificate"></i>
+
+
+                <div>
+
+                    <h3>
+                        {{ certificates_count|default:"0" }}
+                    </h3>
+
+
+                    <p>
+                        Certificates
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+
+            <div class="stat-card">
+
+
+                <i class="fas fa-tasks"></i>
+
+
+                <div>
+
+                    <h3>
+                        {{ assignments_count|default:"0" }}
+                    </h3>
+
+
+                    <p>
+                        Assignments
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+
+        </section>
+
+
+
+
+
+
+
+
+        <!-- Learning Progress -->
+
+
+        <section class="dashboard-card">
+
+
+            <div class="card-title">
+
+
+                <h2>
+                    Learning Progress
+                </h2>
+
+
+            </div>
+
+
+
+            <div class="progress-box">
+
+
+                <div class="progress-bar">
+
+
+                    <div class="progress-fill"
+                         style="width: {{ progress|default:'0' }}%;">
+                    </div>
+
+
+                </div>
+
+
+                <p>
+                    {{ progress|default:"0" }}% Completed
+                </p>
+
+
+            </div>
+
+
+
+        </section>
+
+
+
+
+
+
+
+
+        <!-- Quick Actions -->
+
+
+        <section class="dashboard-card">
+
+
+            <h2>
+                Quick Actions
+            </h2>
+
+
+
+            <div class="quick-actions">
+
+
+
+                <a href="{% url 'courses:course_list' %}"
+                   class="action-card">
+
+
+                    <i class="fas fa-search"></i>
+
+
+                    <span>
+                        Browse Courses
+                    </span>
+
+
+                </a>
+
+
+
+
+
+                <a href="{% url 'courses:my_courses' %}"
+                   class="action-card">
+
+
+                    <i class="fas fa-play"></i>
+
+
+                    <span>
+                        Continue Learning
+                    </span>
+
+
+                </a>
+
+
+
+
+
+
+                <a href="{% url 'certificates:certificate_list' %}"
+                   class="action-card">
+
+
+                    <i class="fas fa-award"></i>
+
+
+                    <span>
+                        My Certificates
+                    </span>
+
+
+                </a>
+
+
+
+
+
+
+                <a href="{% url 'accounts:profile' %}"
+                   class="action-card">
+
+
+                    <i class="fas fa-user"></i>
+
+
+                    <span>
+                        My Profile
+                    </span>
+
+
+                </a>
+
+
+
+            </div>
+
+
+        </section>
+
+
+
+
+
+
+
+
+
+        <!-- Recent Courses -->
+
+
+        <section class="dashboard-card">
+
+
+            <h2>
+                Recent Courses
+            </h2>
+
+
+
+
+            {% if recent_courses %}
+
+
+
+            <div class="course-grid">
+
+
+                {% for course in recent_courses %}
+
+
+                <div class="course-card">
+
+
+                    {% if course.image %}
+
+
+                    <img src="{{ course.image.url }}">
+
+
+                    {% else %}
+
+
+                    <img src="{% static 'images/course-default.png' %}">
+
+
+                    {% endif %}
+
+
+
+
+
+                    <h4>
+
+                        {{ course.title }}
+
+                    </h4>
+
+
+
+                    <a href="{% url 'courses:course_detail' course.id %}"
+                       class="btn-view">
+
+                        View Course
+
+                    </a>
+
+
+
+                </div>
+
+
+                {% endfor %}
+
+
+
+            </div>
+
+
+
+
+            {% else %}
+
+
+
+            <div class="empty-box">
+
+                No courses available yet.
+
+            </div>
+
+
+
+            {% endif %}
+
+
+
+        </section>
+
+
+
+
+
+    </main>
+
+
 
 </div>
+
+
 
 {% endblock %}

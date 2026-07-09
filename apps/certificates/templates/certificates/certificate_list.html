@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+{% load static %}
+
+
+{% block title %}
+My Certificates
+{% endblock %}
+
+
 
 {% block content %}
 
@@ -7,109 +15,94 @@
 <div class="container mt-5">
 
 
-<h2 class="text-center mb-4">
-    My Certificates
-</h2>
+    <h2 class="mb-4">
+        <i class="fa-solid fa-certificate"></i>
+        My Certificates
+    </h2>
 
 
 
-{% if certificates %}
+    <div class="row">
 
 
-<div class="row">
+        {% for certificate in certificates %}
 
 
-{% for certificate in certificates %}
+        <div class="col-md-4 mb-4">
 
 
-<div class="col-md-6 mb-4">
+            <div class="card shadow h-100">
 
 
-<div class="card shadow p-4">
+                <div class="card-body text-center">
 
 
-<h4>
-{{ certificate.course.title }}
-</h4>
-
-
-<hr>
-
-
-<p>
-Certificate Number:
-<br>
-
-<b>
-{{ certificate.certificate_number }}
-</b>
-
-</p>
+                    <img src="{% static 'images/logo.png' %}"
+                         width="80"
+                         class="mb-3">
 
 
 
-<p>
-
-Issued:
-
-<b>
-{{ certificate.issued_at|date:"F d, Y" }}
-</b>
-
-</p>
+                    <h4>
+                        {{ certificate.course.title }}
+                    </h4>
 
 
 
-<div class="mt-3">
-
-
-<a href="{% url 'courses:download_certificate' certificate.course.id %}"
-class="btn btn-primary">
-
-Download PDF
-
-</a>
+                    <p>
+                        Certificate No:
+                        <strong>
+                        {{ certificate.certificate_number }}
+                        </strong>
+                    </p>
 
 
 
-<a href="{% url 'certificates:verify_certificate' certificate.certificate_id %}"
-class="btn btn-success">
-
-Verify
-
-</a>
+                    <p>
+                        Issued:
+                        {{ certificate.issued_at|date:"M d, Y" }}
+                    </p>
 
 
-</div>
+
+                    <a href="{% url 'certificates:verify_certificate' certificate.certificate_id %}"
+                       class="btn btn-success">
+
+                        <i class="fa-solid fa-check"></i>
+                        Verify
+
+                    </a>
 
 
-</div>
+
+                </div>
 
 
-</div>
+            </div>
 
 
-{% endfor %}
+        </div>
 
 
-</div>
+        {% empty %}
 
 
-{% else %}
+        <div class="alert alert-info">
+
+            You don't have any certificates yet.
+
+        </div>
 
 
-<div class="alert alert-info text-center">
-
-You do not have any certificates yet.
-
-</div>
+        {% endfor %}
 
 
-{% endif %}
 
+    </div>
 
 
 </div>
+
 
 
 {% endblock %}

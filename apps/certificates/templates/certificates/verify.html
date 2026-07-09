@@ -3,58 +3,65 @@
 
 {% block content %}
 
+
 <div class="container mt-5">
 
-    <div class="card shadow p-5 text-center">
 
-        <h1 class="text-success">
-            Certificate Verified
-        </h1>
+<div class="card shadow p-5">
 
 
-        <hr>
+<h2 class="text-success">
+
+Certificate Verified
+
+</h2>
 
 
-        <h3>
-            {{ certificate.student.get_full_name }}
-        </h3>
+<hr>
 
 
-        <p>
-            has successfully completed
-        </p>
+<h4>
+
+Student:
+
+{{certificate.student.username}}
+
+</h4>
 
 
-        <h4>
-            {{ certificate.course.title }}
-        </h4>
+
+<h4>
+
+Course:
+
+{{certificate.course.title}}
+
+</h4>
 
 
-        <br>
+
+<p>
+
+Certificate ID:
+
+{{certificate.id}}
+
+</p>
 
 
-        <p>
-            Certificate Number:
-            <strong>
-                {{ certificate.certificate_number }}
-            </strong>
-        </p>
+
+<p>
+
+Issued Date:
+
+{{certificate.issue_date}}
+
+</p>
 
 
-        <p>
-            Issued:
-            {{ certificate.issued_at|date:"F d, Y" }}
-        </p>
 
+</div>
 
-        <div class="alert alert-success">
-
-            ✓ This certificate is authentic
-
-        </div>
-
-
-    </div>
 
 </div>
 

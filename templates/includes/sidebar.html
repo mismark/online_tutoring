@@ -1,0 +1,223 @@
+{% load static %}
+
+<!-- Sidebar Toggle Button (Mobile) -->
+<button class="sidebar-toggle" id="sidebarToggle">
+    <i class="fas fa-bars"></i>
+</button>
+
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+
+
+    <!-- Logo Section -->
+    <div class="sidebar-header">
+
+        <a href="{% url 'dashboard:home' %}">
+
+            <img src="{% static 'images/logo.png' %}" 
+                 alt="Online Tutor Logo"
+                 class="sidebar-logo">
+
+        </a>
+
+
+        <h3>
+            Online Tutor
+        </h3>
+
+
+    </div>
+
+
+
+    <!-- User Profile -->
+    {% if request.user.is_authenticated %}
+
+    <div class="sidebar-profile">
+
+
+        {% if request.user.profile_picture %}
+
+            <img src="{{ request.user.profile_picture.url }}"
+                 class="profile-image"
+                 alt="Profile">
+
+        {% else %}
+
+            <img src="{% static 'images/default.png' %}"
+                 class="profile-image"
+                 alt="Default">
+
+        {% endif %}
+
+
+
+        <h5>
+            {{ request.user.get_full_name|default:request.user.username }}
+        </h5>
+
+
+        <span>
+            {{ request.user.role|title }}
+        </span>
+
+
+    </div>
+
+    {% endif %}
+
+
+
+
+    <!-- Navigation Menu -->
+    <ul class="sidebar-menu">
+
+
+        <!-- Dashboard -->
+        <li>
+            <a href="{% url 'dashboard:home' %}">
+
+                <i class="fas fa-home"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+        </li>
+
+
+
+        <!-- Courses -->
+        <li>
+            <a href="{% url 'courses:course_list' %}">
+
+                <i class="fas fa-book"></i>
+
+                <span>
+                    All Courses
+                </span>
+
+            </a>
+        </li>
+
+
+
+
+        <!-- My Courses -->
+        <li>
+            <a href="{% url 'courses:my_courses' %}">
+
+                <i class="fas fa-graduation-cap"></i>
+
+                <span>
+                    My Courses
+                </span>
+
+            </a>
+        </li>
+
+
+
+
+        <!-- Create Course Teacher Only -->
+        {% if request.user.role == "teacher" or request.user.is_staff %}
+
+        <li>
+
+            <a href="{% url 'courses:course_create' %}">
+
+                <i class="fas fa-plus-circle"></i>
+
+                <span>
+                    Create Course
+                </span>
+
+            </a>
+
+        </li>
+
+        {% endif %}
+
+
+
+
+        <!-- Certificates -->
+        <li>
+
+            <a href="{% url 'certificates:certificate_list' %}">
+
+                <i class="fas fa-certificate"></i>
+
+                <span>
+                    Certificates
+                </span>
+
+            </a>
+
+        </li>
+
+
+
+
+
+        <!-- Profile -->
+        <li>
+
+            <a href="{% url 'accounts:profile' %}">
+
+                <i class="fas fa-user"></i>
+
+                <span>
+                    Profile
+                </span>
+
+            </a>
+
+        </li>
+
+
+
+
+        <!-- Edit Profile -->
+        <li>
+
+            <a href="{% url 'accounts:edit_profile' %}">
+
+                <i class="fas fa-user-edit"></i>
+
+                <span>
+                    Edit Profile
+                </span>
+
+            </a>
+
+        </li>
+
+
+
+
+
+        <!-- Logout -->
+        <li class="logout">
+
+            <a href="{% url 'accounts:logout' %}">
+
+                <i class="fas fa-sign-out-alt"></i>
+
+                <span>
+                    Logout
+                </span>
+
+            </a>
+
+        </li>
+
+
+
+    </ul>
+
+
+
+</aside>

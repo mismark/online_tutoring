@@ -1,23 +1,35 @@
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 from .models import Certificate
 
-from django.contrib.auth.decorators import login_required
+
+
+@login_required
+def certificate_list(request):
+
+    certificates = Certificate.objects.filter(
+        student=request.user
+    ).order_by('-issued_at')
+
+
+    return render(
+        request,
+        "certificates/certificate_list.html",
+        {
+            "certificates": certificates
+        }
+    )
+
+
+
 
 def verify_certificate(request, certificate_id):
 
-
-    try:
-
-        certificate = Certificate.objects.get(
-            certificate_id=certificate_id
-        )
-
-
-    except Certificate.DoesNotExist:
-
-        certificate = None
-
+    certificate = get_object_or_404(
+        Certificate,
+        certificate_id=certificate_id
+    )
 
 
     return render(
@@ -25,21 +37,5 @@ def verify_certificate(request, certificate_id):
         "certificates/verify_certificate.html",
         {
             "certificate": certificate
-        }
-    )
-    
-
-def certificate_list(request):
-    certificates= Certificate.objects.filter(
-        student = request.user
-    ).order_by(
-        "-issued_at"
-    )
-    
-    return render(
-        request,
-        "certificates/certificate_list.html",
-        {
-            "certificates":certificates
         }
     )
