@@ -206,7 +206,8 @@ def update_progress(request, pk):
     )
 
     progress, created = CourseProgress.objects.get_or_create(
-        enrollment=enrollment
+        student=request.user,
+        course_id=pk
     )
 
     if request.method == "POST":
