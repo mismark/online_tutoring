@@ -1,222 +1,128 @@
 {% load static %}
 
-<!-- Sidebar Toggle Button (Mobile) -->
+
 <button class="sidebar-toggle" id="sidebarToggle">
-    <i class="fas fa-bars"></i>
+<i class="fas fa-bars"></i>
 </button>
 
 
-<!-- Sidebar -->
+
 <aside class="sidebar" id="sidebar">
 
 
-    <!-- Logo Section -->
-    <div class="sidebar-header">
+<div class="sidebar-logo-box">
 
-        <a href="{% url 'dashboard:home' %}">
 
-            <img src="{% static 'images/logo.png' %}" 
-                 alt="Online Tutor Logo"
-                 class="sidebar-logo">
+<img src="{% static 'images/logo.png' %}"
+class="sidebar-logo">
 
-        </a>
 
+<h3>
+Online Tutor
+</h3>
 
-        <h3>
-            Online Tutor
-        </h3>
 
+</div>
 
-    </div>
 
 
+{% if user.is_authenticated %}
 
-    <!-- User Profile -->
-    {% if request.user.is_authenticated %}
+{% comment %} 
+<div class="sidebar-user">
 
-    <div class="sidebar-profile">
 
+{% if user.profile_picture %}
 
-        {% if request.user.profile_picture %}
+<img src="{{user.profile_picture.url}}"
+class="profile-image">
 
-            <img src="{{ request.user.profile_picture.url }}"
-                 class="profile-image"
-                 alt="Profile">
+{% else %}
 
-        {% else %}
+<img src="{% static 'images/default-user.png' %}"
+class="profile-image">
 
-            <img src="{% static 'images/default.png' %}"
-                 class="profile-image"
-                 alt="Default">
+{% endif %}
 
-        {% endif %}
 
 
+<h5>
+{{user.username}}
+</h5>
 
-        <h5>
-            {{ request.user.get_full_name|default:request.user.username }}
-        </h5>
 
+<span>
+{{user.role|title}}
+</span>
 
-        <span>
-            {{ request.user.role|title }}
-        </span>
 
+</div> {% endcomment %}
 
-    </div>
 
-    {% endif %}
+{% endif %}
 
 
 
 
-    <!-- Navigation Menu -->
-    <ul class="sidebar-menu">
 
+<ul class="sidebar-menu">
 
-        <!-- Dashboard -->
-        <li>
-            <a href="{% url 'dashboard:home' %}">
 
-                <i class="fas fa-home"></i>
+<li>
+<a href="{% url 'dashboard:home' %}">
+<i class="fa fa-home"></i>
+Dashboard
+</a>
+</li>
 
-                <span>
-                    Dashboard
-                </span>
 
-            </a>
-        </li>
 
+<li>
+<a href="{% url 'courses:course_list' %}">
+<i class="fa fa-book"></i>
+Courses
+</a>
+</li>
 
 
-        <!-- Courses -->
-        <li>
-            <a href="{% url 'courses:course_list' %}">
 
-                <i class="fas fa-book"></i>
+<li>
+<a href="{% url 'courses:my_courses' %}">
+<i class="fa fa-graduation-cap"></i>
+My Courses
+</a>
+</li>
 
-                <span>
-                    All Courses
-                </span>
 
-            </a>
-        </li>
 
+<li>
+<a href="{% url 'certificates:certificate_list' %}">
+<i class="fa fa-certificate"></i>
+Certificates
+</a>
+</li>
 
 
 
-        <!-- My Courses -->
-        <li>
-            <a href="{% url 'courses:my_courses' %}">
+<li>
+<a href="{% url 'accounts:profile' %}">
+<i class="fa fa-user"></i>
+Profile
+</a>
+</li>
 
-                <i class="fas fa-graduation-cap"></i>
 
-                <span>
-                    My Courses
-                </span>
 
-            </a>
-        </li>
+<li>
+<a href="{% url 'accounts:logout' %}">
+<i class="fa fa-sign-out"></i>
+Logout
+</a>
+</li>
 
 
 
-
-        <!-- Create Course Teacher Only -->
-        {% if request.user.role == "teacher" or request.user.is_staff %}
-
-        <li>
-
-            <a href="{% url 'courses:course_create' %}">
-
-                <i class="fas fa-plus-circle"></i>
-
-                <span>
-                    Create Course
-                </span>
-
-            </a>
-
-        </li>
-
-        {% endif %}
-
-
-
-
-        <!-- Certificates -->
-        <li>
-
-            <a href="{% url 'certificates:certificate_list' %}">
-
-                <i class="fas fa-certificate"></i>
-
-                <span>
-                    Certificates
-                </span>
-
-            </a>
-
-        </li>
-
-
-
-
-
-        <!-- Profile -->
-        <li>
-
-            <a href="{% url 'accounts:profile' %}">
-
-                <i class="fas fa-user"></i>
-
-                <span>
-                    Profile
-                </span>
-
-            </a>
-
-        </li>
-
-
-
-
-        <!-- Edit Profile -->
-        <li>
-
-            <a href="{% url 'accounts:edit_profile' %}">
-
-                <i class="fas fa-user-edit"></i>
-
-                <span>
-                    Edit Profile
-                </span>
-
-            </a>
-
-        </li>
-
-
-
-
-
-        <!-- Logout -->
-        <li class="logout">
-
-            <a href="{% url 'accounts:logout' %}">
-
-                <i class="fas fa-sign-out-alt"></i>
-
-                <span>
-                    Logout
-                </span>
-
-            </a>
-
-        </li>
-
-
-
-    </ul>
+</ul>
 
 
 

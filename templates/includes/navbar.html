@@ -1,58 +1,51 @@
-<ul class="navbar-nav ms-auto">
+{% load static %}
 
-    {% if user.is_authenticated %}
 
-    {% comment %} <li class="nav-item">
-        <a class="nav-link" href="{% url 'dashboard:home' %}">
-            Dashboard
-        </a>
-    </li>
+<header class="top-navbar">
 
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'accounts:profile' %}">
-            Profile
-        </a>
-    </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'accounts:logout' %}">
-            Logout
-        </a>
-    </li> {% endcomment %}
+<div class="brand">
 
-    {% include "includes/sidebar.html" %}
 
-    {% else %}
+<img src="{% static 'images/logo.png' %}">
 
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'accounts:login' %}">
-            Login
-        </a>
-    </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'accounts:register' %}">
-            Register
-        </a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link"
-       href="{% url 'courses:my_courses' %}">
-        My Courses
-    </a>
-</li>
+<h3>
+Online Tutor
+</h3>
 
-<li class="nav-item">
 
-<a class="nav-link"
-href="{% url 'certificates:certificate_list' %}">
+</div>
 
-My Certificates
 
-</a>
 
-</li>
+<div class="nav-user">
 
-    {% endif %}
 
-</ul>
+{% if user.is_authenticated %}
+
+
+{% if user.profile_picture %}
+
+<img src="{{user.profile_picture.url}}">
+
+{% else %}
+
+<img src="{% static 'images/default-user.png' %}">
+
+{% endif %}
+
+
+<span>
+{{user.username}}
+</span>
+
+
+{% endif %}
+
+
+</div>
+
+
+
+</header>
