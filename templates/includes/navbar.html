@@ -2,7 +2,7 @@
 
     {% if user.is_authenticated %}
 
-    <li class="nav-item">
+    {% comment %} <li class="nav-item">
         <a class="nav-link" href="{% url 'dashboard:home' %}">
             Dashboard
         </a>
@@ -18,7 +18,9 @@
         <a class="nav-link" href="{% url 'accounts:logout' %}">
             Logout
         </a>
-    </li>
+    </li> {% endcomment %}
+
+    {% include "includes/sidebar.html" %}
 
     {% else %}
 
