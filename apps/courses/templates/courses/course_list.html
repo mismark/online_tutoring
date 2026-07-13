@@ -1,265 +1,527 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Courses{% endblock %}
+
+{% block title %}
+Courses
+{% endblock %}
+
+
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'courses/courses.css' %}">
+
+{% endblock %}
+
+
+
+
 
 {% block content %}
 
-<div class="container mt-4">
 
-    <h2 class="mb-4">All Courses</h2>
+<div class="courses-page container-fluid">
 
-    <div class="row mb-4">
 
-    <div class="col-md-4">
-        <div class="alert alert-primary text-center">
-            <h5>Total Courses</h5>
-            <h2>{{ total_courses }}</h2>
-        </div>
-    </div>
+<h2 class="page-title">
+    All Courses
+</h2>
 
-    <div class="col-md-4">
-        <div class="alert alert-success text-center">
-            <h5>Published</h5>
-            <h2>{{ published_courses }}</h2>
-        </div>
-    </div>
 
-    <div class="col-md-4">
-        <div class="alert alert-warning text-center">
-            <h5>Draft</h5>
-            <h2>{{ draft_courses }}</h2>
-        </div>
-    </div>
 
-</div>
 
-<div class="row mb-4">
+<!-- =====================
+     COURSE STATISTICS
+===================== -->
 
-    <div class="col-md-4">
-        <div class="card border-success shadow-sm">
-            <div class="card-body text-center">
-                <h5>Beginner</h5>
-                <h2>{{ beginner_courses }}</h2>
-            </div>
-        </div>
-    </div>
 
-    <div class="col-md-4">
-        <div class="card border-warning shadow-sm">
-            <div class="card-body text-center">
-                <h5>Intermediate</h5>
-                <h2>{{ intermediate_courses }}</h2>
-            </div>
-        </div>
-    </div>
+<div class="course-stat-grid">
 
-    <div class="col-md-4">
-        <div class="card border-danger shadow-sm">
-            <div class="card-body text-center">
-                <h5>Advanced</h5>
-                <h2>{{ advanced_courses }}</h2>
-            </div>
-        </div>
-    </div>
 
-</div>
+<div class="stat-box blue">
 
-<h4 class="mt-4 mb-3">Recently Added Courses</h4>
+<h5>
+Total Courses
+</h5>
 
-<div class="list-group mb-4">
-
-    {% for course in recent_courses %}
-
-    <a href="{% url 'courses:course_detail' course.pk %}"
-       class="list-group-item list-group-item-action">
-
-        <strong>{{ course.title }}</strong>
-
-        <br>
-
-        <small class="text-muted">
-            {{ course.created_at|date:"M d, Y" }}
-        </small>
-
-    </a>
-
-    {% empty %}
-
-    <div class="list-group-item">
-        No recent courses.
-    </div>
-
-    {% endfor %}
+<h2>
+{{ total_courses }}
+</h2>
 
 </div>
 
 
-    <!-- Search Form -->
-    <form method="GET" class="row g-3 mb-4">
 
-    <div class="col-md-3">
-        <input
-            type="text"
-            name="q"
-            class="form-control"
-            placeholder="Search..."
-            value="{{ query }}">
-    </div>
+<div class="stat-box green">
 
-    <div class="col-md-2">
-        <select name="level" class="form-select">
-            <option value="">All Levels</option>
-            <option value="beginner" {% if level == "beginner" %}selected{% endif %}>Beginner</option>
-            <option value="intermediate" {% if level == "intermediate" %}selected{% endif %}>Intermediate</option>
-            <option value="advanced" {% if level == "advanced" %}selected{% endif %}>Advanced</option>
-        </select>
-    </div>
+<h5>
+Published
+</h5>
 
-    <div class="col-md-2">
-        <select name="status" class="form-select">
-            <option value="">All Status</option>
-            <option value="draft" {% if status == "draft" %}selected{% endif %}>Draft</option>
-            <option value="published" {% if status == "published" %}selected{% endif %}>Published</option>
-        </select>
-    </div>
+<h2>
+{{ published_courses }}
+</h2>
 
-    <div class="col-md-3">
-        <select name="sort" class="form-select">
+</div>
 
-            <option value="">Newest First</option>
 
-            <option value="oldest"
-                {% if sort == "oldest" %}selected{% endif %}>
-                Oldest First
-            </option>
 
-            <option value="title"
-                {% if sort == "title" %}selected{% endif %}>
-                Title (A-Z)
-            </option>
+<div class="stat-box orange">
 
-            <option value="price_low"
-                {% if sort == "price_low" %}selected{% endif %}>
-                Price: Low to High
-            </option>
+<h5>
+Draft
+</h5>
 
-            <option value="price_high"
-                {% if sort == "price_high" %}selected{% endif %}>
-                Price: High to Low
-            </option>
+<h2>
+{{ draft_courses }}
+</h2>
 
-        </select>
-    </div>
+</div>
 
-    <div class="col-md-2">
-        <button class="btn btn-primary w-100">
-            Apply
-        </button>
-    </div>
+
+</div>
+
+
+
+
+
+
+
+<div class="course-level-grid">
+
+
+<div class="level-card beginner">
+
+<h5>
+Beginner
+</h5>
+
+<h2>
+{{ beginner_courses }}
+</h2>
+
+</div>
+
+
+
+
+<div class="level-card intermediate">
+
+<h5>
+Intermediate
+</h5>
+
+<h2>
+{{ intermediate_courses }}
+</h2>
+
+</div>
+
+
+
+
+<div class="level-card advanced">
+
+<h5>
+Advanced
+</h5>
+
+<h2>
+{{ advanced_courses }}
+</h2>
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+<!-- =====================
+     RECENT COURSES
+===================== -->
+
+
+<h3 class="section-title">
+Recently Added Courses
+</h3>
+
+
+
+<div class="recent-list">
+
+
+{% for course in recent_courses %}
+
+
+<a href="{% url 'courses:course_detail' course.pk %}"
+class="recent-item">
+
+
+<strong>
+{{ course.title }}
+</strong>
+
+
+<span>
+
+{{ course.created_at|date:"M d, Y" }}
+
+</span>
+
+
+</a>
+
+
+
+{% empty %}
+
+
+<div class="empty-box">
+
+No recent courses.
+
+</div>
+
+
+{% endfor %}
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- =====================
+     SEARCH
+===================== -->
+
+
+<form method="GET"
+class="course-search">
+
+
+
+<input 
+type="text"
+name="q"
+placeholder="Search courses..."
+value="{{query}}"
+class="search-input">
+
+
+
+
+
+<select name="level">
+
+<option value="">
+All Levels
+</option>
+
+
+<option value="beginner"
+{% if level == "beginner" %}selected{% endif %}>
+Beginner
+</option>
+
+
+
+<option value="intermediate"
+{% if level == "intermediate" %}selected{% endif %}>
+Intermediate
+</option>
+
+
+
+<option value="advanced"
+{% if level == "advanced" %}selected{% endif %}>
+Advanced
+</option>
+
+
+</select>
+
+
+
+
+
+
+<select name="status">
+
+
+<option value="">
+All Status
+</option>
+
+
+<option value="published"
+{% if status == "published" %}selected{% endif %}>
+Published
+</option>
+
+
+<option value="draft"
+{% if status == "draft" %}selected{% endif %}>
+Draft
+</option>
+
+
+</select>
+
+
+
+
+
+<select name="sort">
+
+
+<option value="">
+Newest First
+</option>
+
+
+<option value="oldest">
+Oldest First
+</option>
+
+
+<option value="title">
+Title A-Z
+</option>
+
+
+<option value="price_low">
+Price Low
+</option>
+
+
+<option value="price_high">
+Price High
+</option>
+
+
+</select>
+
+
+
+
+
+<button type="submit">
+
+Search
+
+</button>
+
+
 
 </form>
 
-    {% if not courses %}
-        <div class="alert alert-warning">
-            No courses found.
-        </div>
-    {% endif %}
-
-    <div class="row">
-
-        {% for course in courses %}
-
-        <div class="col-md-4">
-
-            <div class="card mb-4 shadow">
-
-                {% if course.thumbnail %}
-                    <img
-                        src="{{ course.thumbnail.url }}"
-                        class="card-img-top"
-                        style="height:220px; object-fit:cover;"
-                        alt="{{ course.title }}">
-                {% else %}
-                    <img
-                        src="{% static 'images/default-course.png' %}"
-                        class="card-img-top"
-                        style="height:220px; object-fit:cover;"
-                        alt="No Image">
-                {% endif %}
-
-                <div class="card-body">
-
-                    <h4>{{ course.title }}</h4>
-
-                    <p>{{ course.description|truncatewords:20 }}</p>
-
-                    <small class="text-muted d-block mb-2">
-    Created: {{ course.created_at|date:"M d, Y" }}
-</small>
-
-                    <a href="{% url 'courses:course_detail' course.pk %}"
-                       class="btn btn-primary">
-                        View Course
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <nav class="mt-4">
-
-    <ul class="pagination justify-content-center">
-
-        {% if courses.has_previous %}
-
-        <li class="page-item">
-
-            <a class="page-link"
-               href="?page={{ courses.previous_page_number }}&q={{ query }}&level={{ level }}&status={{ status }}&sort={{ sort }}">
-                Previous
-            </a>
-
-        </li>
-
-        {% endif %}
-
-        <li class="page-item active">
-
-            <span class="page-link">
-
-                {{ courses.number }}
-
-            </span>
-
-        </li>
-
-        {% if courses.has_next %}
-
-        <li class="page-item">
-
-            <a class="page-link"
-               href="?page={{ courses.next_page_number }}&q={{ query }}&level={{ level }}&status={{ status }}&sort={{ sort }}">
-                Next
-            </a>
-
-        </li>
-
-        {% endif %}
-
-    </ul>
-
-</nav>
 
 
 
-        {% endfor %}
 
-    </div>
+
+
+
+
+<!-- =====================
+     COURSE CARDS
+===================== -->
+
+
+
+<div class="course-grid">
+
+
+
+{% for course in courses %}
+
+
+
+<div class="course-card">
+
+
+
+
+
+{% if course.thumbnail %}
+
+
+<img src="{{course.thumbnail.url}}"
+class="course-image"
+alt="{{course.title}}">
+
+
+{% else %}
+
+
+<img src="{% static 'images/default-course.png' %}"
+class="course-image"
+alt="default">
+
+
+{% endif %}
+
+
+
+
+
+
+<div class="course-body">
+
+
+
+<h3>
+{{course.title}}
+</h3>
+
+
+
+
+<p>
+
+{{course.description|truncatewords:20}}
+
+</p>
+
+
+
+
+<span class="course-date">
+
+{{course.created_at|date:"M d,Y"}}
+
+</span>
+
+
+
+
+
+<a href="{% url 'courses:course_detail' course.pk %}"
+class="course-button">
+
+
+View Course
+
+
+</a>
+
+
 
 </div>
+
+
+
+
+</div>
+
+
+
+
+
+{% empty %}
+
+
+<div class="empty-box">
+
+No courses found.
+
+</div>
+
+
+{% endfor %}
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<!-- =====================
+     PAGINATION
+===================== -->
+
+
+{% if courses.paginator.num_pages > 1 %}
+
+
+<div class="pagination-box">
+
+
+{% if courses.has_previous %}
+
+
+<a href="?page={{courses.previous_page_number}}&q={{query}}&level={{level}}&status={{status}}&sort={{sort}}">
+
+Previous
+
+</a>
+
+
+{% endif %}
+
+
+
+
+<span>
+
+{{courses.number}}
+
+/
+
+{{courses.paginator.num_pages}}
+
+</span>
+
+
+
+
+
+{% if courses.has_next %}
+
+
+<a href="?page={{courses.next_page_number}}&q={{query}}&level={{level}}&status={{status}}&sort={{sort}}">
+
+Next
+
+</a>
+
+
+{% endif %}
+
+
+
+</div>
+
+
+{% endif %}
+
+
+
+
+
+
+</div>
+
+
 
 {% endblock %}

@@ -6,8 +6,9 @@
 
 <div class="brand">
 
-
+<a href="{% url 'accounts:profile' %}">
 <img src="{% static 'images/logo.png' %}">
+</a>
 
 
 <h3>
@@ -20,7 +21,7 @@ Online Tutor
 
 
 <div class="nav-user">
-
+<a href="{% url 'accounts:profile' %}">
 
 {% if user.is_authenticated %}
 
@@ -29,6 +30,7 @@ Online Tutor
 
 <img src="{{user.profile_picture.url}}">
 
+
 {% else %}
 
 <img src="{% static 'images/default-user.png' %}">
@@ -36,13 +38,9 @@ Online Tutor
 {% endif %}
 
 
-<span>
-{{user.username}}
-</span>
-
-
 {% endif %}
 
+</a>
 
 </div>
 
